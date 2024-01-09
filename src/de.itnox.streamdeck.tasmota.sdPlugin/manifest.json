@@ -2,11 +2,11 @@
 	"SDKVersion": 2,
 	"Author": "Michael Balen",
 	"CodePath": "app.html",
-	"Description": "Control your Tasmota devices with your streamdeck.",
+	"Description": "Control your Tasmota devices with your Stream Deck.",
 	"Name": "Tasmota",
 	"Icon": "actions/assets/tasmota_logo",
 	"URL": "https://github.com/aeinstein",
-	"Version": "0.0.1",
+	"Version": "0.0.1-prealpha",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},
