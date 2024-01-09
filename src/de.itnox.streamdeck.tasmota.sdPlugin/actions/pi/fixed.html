@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta
+			name="viewport"
+			content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<title>de.itnox.streamdeck.tasmota Property Inspector</title>
+	<link rel="stylesheet" href="../../libs/css/sdpi.css" />
+</head>
+
+<body>
+<div class="sdpi-wrapper">
+	<hr>
+	<form id="property-inspector">
+		<div class="sdpi-item">
+			<div data-localize class="sdpi-item-label" title="URL of the tasmota device">URL</div>
+			<input data-localize class="sdpi-item-value" name="url" type="text" value="" title="URL of the tasmota device" placeholder="http://192.168.53.240" />
+		</div>
+
+		<div class="sdpi-item">
+			<div data-localize class="sdpi-item-label" title="">Login</div>
+			<input data-localize class="sdpi-item-value" id="user" type="text" value="" title="Login" placeholder="no authentication" />
+		</div>
+
+		<div class="sdpi-item">
+			<div data-localize class="sdpi-item-label" title="">Password</div>
+			<input data-localize class="sdpi-item-value" id="password" type="text" value="" title="Password" />
+		</div>
+		<hr>
+
+		<div type="color" class="sdpi-item">
+			<div data-localize class="sdpi-item-label">Color</div>
+			<input type="color" class="sdpi-item-value" name="color" value="#ff0000">
+		</div>
+
+		<div type="range" class="sdpi-item">
+			<div data-localize class="sdpi-item-label">Brightness</div>
+			<input type="range" class="sdpi-item-value" min="0" max="100" name="brightness">
+		</div>
+
+	</form>
+</div>
+
+<!-- Stream Deck Libs -->
+<script src="../../libs/js/constants.js"></script>
+<script src="../../libs/js/prototypes.js"></script>
+<script src="../../libs/js/timers.js"></script>
+<script src="../../libs/js/utils.js"></script>
+<script src="../../libs/js/events.js"></script>
+<script src="../../libs/js/api.js"></script>
+<script src="../../libs/js/property-inspector.js"></script>
+<script src="../../libs/js/dynamic-styles.js"></script>
+
+<!-- Property Inspector Source -->
+<script src="inspector.js"></script>
+</body>
+
+</html>

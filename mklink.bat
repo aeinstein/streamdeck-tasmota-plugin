@@ -1,0 +1,1 @@
+mklink /D C:\Users\aeinstein.ITNOX\AppData\Roaming\Elgato\StreamDeck\Plugins\de.itnox.streamdeck.tasmota.sdPlugin C:\Users\aeinstein.ITNOX\PhpstormProjects\streamdeck-plugin-template\src\de.itnox.streamdeck.tasmota.sdPlugin

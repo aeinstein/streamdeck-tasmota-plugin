@@ -1,0 +1,135 @@
+{
+	"SDKVersion": 2,
+	"Author": "Michael Balen",
+	"CodePath": "app.html",
+	"Description": "Control your Tasmota devices with your streamdeck.",
+	"Name": "Tasmota",
+	"Icon": "actions/assets/tasmota_logo",
+	"URL": "https://github.com/aeinstein",
+	"Version": "0.0.1",
+	"Software": {
+		"MinimumVersion": "5.0"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "10.11"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Category": "Tasmota",
+	"CategoryIcon": "actions/assets/tasmota_logo",
+	"Actions": [
+		{
+			"Icon": "actions/assets/power",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/assets/power@2x"
+				}
+			],
+			"UUID": "de.itnox.streamdeck.tasmota.toggle",
+			"PropertyInspectorPath": "actions/pi/outlet.html"
+		},
+
+		{
+			"Icon": "actions/assets/power",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/assets/color@2x"
+				}
+			],
+			"UUID": "de.itnox.streamdeck.tasmota.fixed",
+			"PropertyInspectorPath": "actions/pi/fixed.html"
+		},
+
+		{
+			"Name": "Color",
+			"Icon": "actions/assets/color",
+			"Controllers": ["Encoder"],
+			"Encoder": {
+				"layout": "layouts/rgb.json",
+				"TriggerDescription": {
+					"Rotate": "Color",
+					"Push": "Switch through base colors"
+				}
+			},
+			"States": [
+				{
+					"Image": "actions/assets/color@2x"
+				}
+			],
+			"Tooltip": "This is an example tooltip",
+			"UUID": "de.itnox.streamdeck.tasmota.color",
+			"PropertyInspectorPath": "actions/pi/ledstripe.html"
+		},
+
+		{
+			"Name": "Brightness",
+			"Icon": "actions/assets/brightness",
+			"Controllers": ["Encoder"],
+			"Encoder": {
+				"layout": "layouts/brightness.json",
+				"TriggerDescription": {
+					"Rotate": "Brightness",
+					"Push": "Toggle Min/Max"
+				}
+			},
+			"States": [
+				{
+					"Image": "actions/assets/brightness@2x"
+				}
+			],
+			"Tooltip": "This is an example tooltip",
+			"UUID": "de.itnox.streamdeck.tasmota.brightness",
+			"PropertyInspectorPath": "actions/pi/ledstripe.html"
+		},
+
+		{
+			"Name": "Temperature",
+			"Icon": "actions/assets/temperature",
+			"Controllers": ["Encoder"],
+			"Encoder": {
+				"layout": "layouts/temp.json",
+				"TriggerDescription": {
+					"Rotate": "Color Temp",
+					"Push": "Toggle Min/Max"
+				}
+			},
+			"States": [
+				{
+					"Image": "actions/assets/temperature"
+				}
+			],
+			"Tooltip": "This is an example tooltip",
+			"UUID": "de.itnox.streamdeck.tasmota.temperature",
+			"PropertyInspectorPath": "actions/pi/ledstripe.html"
+		},
+
+		{
+			"Name": "RGB Device",
+			"Icon": "actions/assets/temperature",
+			"Controllers": ["Encoder"],
+			"Encoder": {
+				"layout": "layouts/rgb.json",
+				"TriggerDescription": {
+					"Rotate": "Parameter",
+					"Push": "Switch Parameter",
+					"LongTouch": "On/Off"
+				}
+			},
+			"States": [
+				{
+					"Image": "actions/assets/temperature"
+				}
+			],
+			"Tooltip": "This is an example tooltip",
+			"UUID": "de.itnox.streamdeck.tasmota.rgbdevice",
+			"PropertyInspectorPath": "actions/pi/ledstripe.html"
+		}
+	]
+}

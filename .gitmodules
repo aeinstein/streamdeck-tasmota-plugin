@@ -1,0 +1,3 @@
+[submodule "src/de.itnox.streamdeck.tasmota/libs"]
+	path = src/de.itnox.streamdeck.tasmota/libs
+	url = https://github.com/elgatosf/streamdeck-javascript-sdk

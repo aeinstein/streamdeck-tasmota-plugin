@@ -1,0 +1,32 @@
+{
+  "Description": "Plugin for controlling tasmota devices",
+  "Name": "Tasmota Bindings",
+  "de.itnox.streamdeck.tasmota.toggle": {
+    "Name": "Toggle",
+    "Tooltip": "Toggles a channel"
+  },
+  "de.itnox.streamdeck.tasmota.color": {
+    "Name": "Color",
+    "Tooltip": "Color RGB"
+  },
+  "de.itnox.streamdeck.tasmota.brightness": {
+    "Name": "Brightness",
+    "Tooltip": "Brightness"
+  },
+  "de.itnox.streamdeck.tasmota.temperature": {
+    "Name": "Temperature",
+    "Tooltip": "Color temp."
+  },
+
+  "Localization": {
+    "More info": "More info",
+    "Message": "Message",
+    "Click Me": "Click Me",
+    "Button": "Button",
+    "More": "More",
+    "My name": "My name",
+    "My title": "My title",
+    "My message": "My message",
+    "My button": "My button"
+  }
+}

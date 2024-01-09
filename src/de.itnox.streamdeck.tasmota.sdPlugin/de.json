@@ -1,0 +1,36 @@
+{
+  "Description": "Ein Plugin zur Steuerung von Geräten mit Tasmota Firmware",
+  "Name": "Tasmota Bindings",
+  "de.itnox.streamdeck.tasmota.toggle": {
+    "Name": "Steckdose",
+    "Tooltip": "An/Aus schalten von Tasmota Steckdosen"
+  },
+
+  "de.itnox.streamdeck.tasmota.color": {
+    "Name": "Farbe",
+    "Tooltip": "Farbregler"
+  },
+  "de.itnox.streamdeck.tasmota.brightness": {
+    "Name": "Helligkeit",
+    "Tooltip": "Hellgkeitsregler"
+  },
+  "de.itnox.streamdeck.tasmota.temperature": {
+    "Name": "Temperatur",
+    "Tooltip": "Temperaturregler"
+  },
+
+  "de.itnox.streamdeck.tasmota.fixed": {
+    "Name": "Fester RGB Wert",
+    "Tooltip": ""
+  },
+
+  "Localization": {
+    "More info": "Mehr Infos",
+    "Message": "Nachricht",
+    "Click Me": "Klicke mich",
+    "Button": "Taste",
+    "URL of the tasmota device": "URL des Tasmota Gerätes",
+    "Color": "Farbe",
+    "Brightness": "Helligkeit"
+  }
+}
