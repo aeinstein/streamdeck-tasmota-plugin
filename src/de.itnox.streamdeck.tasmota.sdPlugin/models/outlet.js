@@ -1,23 +1,23 @@
 /// <reference path="libs/js/action.js" />
 /// <reference path="libs/js/stream-deck.js" />
 
-let plug = false;
-
 const toggleAction = new Action('de.itnox.streamdeck.tasmota.toggle');
 
 toggleAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    plug = !plug;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    setOutlet(context, payload.settings.url, plug, updateAction);
+    t_device.power = !t_device.power;
+
+    setOutlet(context, payload.settings.url, t_device.power, updateOutlet);
 });
 
 toggleAction.onWillAppear(({action, context, device, event, payload})=>{
-    getOutlet(context, payload.settings.url, updateAction);
+    getOutlet(context, payload.settings.url, updateOutlet);
 })
 
-updateAction = (context, success, result)=>{
+updateOutlet = (context, success, result)=>{
     console.log(result);
 
     if(!success) {
@@ -34,4 +34,3 @@ updateAction = (context, success, result)=>{
         $SD.setTitle(context, "ON");
     }
 }
-

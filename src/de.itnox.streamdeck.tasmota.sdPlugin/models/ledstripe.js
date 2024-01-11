@@ -7,11 +7,10 @@ const tempAction = new Action('de.itnox.streamdeck.tasmota.temperature');
 const ledaction= new Action('de.itnox.streamdeck.tasmota.rgbdevice');
 const fixedAction= new Action('de.itnox.streamdeck.tasmota.fixed');
 
-let color = 0;
-let brightness = 0;
-let temp = 0;
 let downTimer = -1;
-let currentView = 0;
+
+const viewStates = [];
+
 
 const layouts = [
     "layouts/rgb.json",
@@ -22,6 +21,8 @@ const layouts = [
 
 fixedAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
+
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
     if(payload.settings.color != "") {
         setColor(context, payload.settings.url, payload.settings.color, updateAction);
@@ -40,9 +41,9 @@ ledaction.onDialDown(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
     downTimer = setTimeout(()=>{
-        fireHold(context);
+        fireHold(context, payload);
         downTimer = -1;
-    }, 500);
+    }, 1000);
 
 });
 
@@ -52,83 +53,91 @@ ledaction.onDialUp(({action, context, device, event, payload})=>{
     if(downTimer >= 0) {
         clearInterval(downTimer);
         downTimer = -1;
-        firePress(context);
+        firePress(context, payload);
     }
 });
 
 ledaction.onDialRotate(({ action, context, device, event, payload }) => {
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    switch(currentView){
+    switch(viewStates[context]){
         case 0:
-            color += payload.ticks;
+            t_device.color += payload.ticks;
 
-            if(color > 100) {
-                color -= 101;
+            if(t_device.color > 100) {
+                t_device.color -= 101;
             }
 
-            if(color < 0) {
-                color += 101;
+            if(t_device.color < 0) {
+                t_device.color += 101;
             }
 
-            setColor(context, payload.settings.url, color, updateAction);
+            setColor(context, payload.settings.url, t_device.color, percent2RGB(t_device.color), updateValue);
             break;
 
         case 1:
-            brightness += payload.ticks;
+            t_device.brightness += payload.ticks;
 
-            if(brightness > 100) {
-                brightness = 100;
+            if(t_device.brightness > 100) {
+                t_device.brightness = 100;
             }
 
-            if(brightness < 0) {
-                brightness = 0;
+            if(t_device.brightness < 0) {
+                t_device.brightness = 0;
             }
 
-            setBrightness(context, payload.settings.url, brightness, updateValue);
+            setBrightness(context, payload.settings.url, t_device.brightness, updateValue);
             break;
 
         case 2:
-            temp += payload.ticks;
+            t_device.temp += payload.ticks;
 
-            if(temp > 100) {
-                temp = 100;
+            if(t_device.temp > 100) {
+                t_device.temp = 100;
             }
 
-            if(temp < 0) {
-                temp = 0;
+            if(t_device.temp < 0) {
+                t_device.temp = 0;
             }
 
-            setTemperature(context, payload.settings.url, temp, updateValue);
+            setTemperature(context, payload.settings.url, t_device.temp, updateValue);
             break;
     }
 
 });
 
-function fireHold(context){
+function fireHold(context, payload){
     console.log("fireHold");
+
+
 }
 
-function firePress(context){
+function firePress(context, payload){
     console.log("firePress");
-    currentView++;
 
-    if(currentView >= layouts.length) currentView = 0;
+    if(isNaN(viewStates[context])) viewStates[context] = 0;
 
-    $SD.setFeedbackLayout(context, layouts[currentView]);
+    viewStates[context]++;
+
+    if(viewStates[context] >= layouts.length) viewStates[context] = 0;
+
+    $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
 
     let val = 0;
 
-    switch(currentView){
+    const t_device = cache.getOrAddDevice(payload.settings.url);
+
+    switch(viewStates[context]){
         case 0:
-            val = color;
+            val = t_device.color;
             break;
 
         case 1:
-            val = brightness;
+            val = t_device.brightness;
             break;
 
         case 2:
-            val = temp;
+            val = t_device.temp;
             break;
     }
 
@@ -136,7 +145,6 @@ function firePress(context){
         "value": val,
         "indicator": val
     });
-
 }
 
 updateValue = (context, success, result)=>{
@@ -148,27 +156,26 @@ updateValue = (context, success, result)=>{
     }
 }
 
+
+
 colorAction.onDialRotate(({ action, context, device, event, payload }) => {
-    color += payload.ticks;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    if(color > 100) {
-        color = 100;
-        $SD.showAlert(context);
-    }
+    t_device.color += payload.ticks;
 
-    if(color < 0) {
-        color = 0;
-        $SD.showAlert(context);
-    }
+    if(t_device.color > 100) t_device.color -= 100;
+    if(t_device.color < 0) t_device.color += 100;
 
-    setColor(context, payload.settings.url, color, updateAction);
+    setColor(context, payload.settings.url, t_device.color, percent2RGB(t_device.color), updateValue);
 });
 
 colorAction.onDialUp(({ action, context, device, event, payload }) => {
-    if(color > 0) color = 0;
-    else color = 100;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    setColor(context, payload.settings.url, color);
+    if(t_device.color > 0) t_device.color = 0;
+    else t_device.color = 100;
+
+    setColor(context, payload.settings.url, t_device.color, percent2RGB(t_device.color), updateValue);
 });
 
 colorAction.onWillAppear(({action, context, device, event, payload})=>{
@@ -180,25 +187,29 @@ colorAction.onWillAppear(({action, context, device, event, payload})=>{
 
 
 brightnessAction.onDialRotate(({ action, context, device, event, payload }) => {
-    brightness += payload.ticks;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    if(brightness > 100) {
-        brightness = 100;
+    t_device.brightness += payload.ticks;
+
+    if(t_device.brightness > 100) {
+        t_device.brightness = 100;
         $SD.showAlert(context);
     }
-    if(brightness < 0) {
-        brightness = 0;
+    if(t_device.brightness < 0) {
+        t_device.brightness = 0;
         $SD.showAlert(context);
     }
 
-    setBrightness(context, payload.settings.url, brightness, updateValue);
+    setBrightness(context, payload.settings.url, t_device.brightness, updateValue);
 });
 
 brightnessAction.onDialUp(({ action, context, device, event, payload }) => {
-    if(brightness > 0) brightness = 0;
-    else brightness = 100;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    setBrightness(context, payload.settings.url, brightness);
+    if(t_device.brightness > 0) t_device.brightness = 0;
+    else t_device.brightness = 100;
+
+    setBrightness(context, payload.settings.url, t_device.brightness, updateValue);
 });
 
 brightnessAction.onWillAppear(({action, context, device, event, payload})=>{
@@ -210,25 +221,29 @@ brightnessAction.onWillAppear(({action, context, device, event, payload})=>{
 
 
 tempAction.onDialRotate(({ action, context, device, event, payload }) => {
-    temp += payload.ticks;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    if(temp > 100) {
-        temp = 100;
+    t_device.temp += payload.ticks;
+
+    if(t_device.temp > 100) {
+        t_device.temp = 100;
         $SD.showAlert(context);
     }
-    if(temp < 0) {
-        temp = 0;
+    if(t_device.temp < 0) {
+        t_device.temp = 0;
         $SD.showAlert(context);
     }
 
-    setTemperature(context, payload.settings.url, temp);
+    setTemperature(context, payload.settings.url, t_device.temp, updateValue);
 });
 
 tempAction.onDialUp(({ action, context, device, event, payload }) => {
-    if(temp > 0) temp = 0;
-    else temp = 100;
+    const t_device = cache.getOrAddDevice(payload.settings.url);
 
-    setBrightness(context, payload.settings.url, temp);
+    if(t_device.temp > 0) t_device.temp = 0;
+    else t_device.temp = 100;
+
+    setTemperature(context, payload.settings.url, t_device.temp, updateValue);
 });
 
 tempAction.onWillAppear(({action, context, device, event, payload})=>{
