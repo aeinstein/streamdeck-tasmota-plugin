@@ -48,30 +48,120 @@ interpolateValue = (start_color, end_color, start_val, end_val, val)=>{
     return Math.floor(start_color + (step_size *val));
 }
 
-createXHR = (context, callback)=>{
-    let xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-    xhr.timeout = 2000;
+class Cache {
+    devices = [];
 
-    xhr.onerror = () => {
-        callback(context, false, 'Unable to connect to the bridge.');
-    };
+    getOrAddDevice(context, url) {
+        if(url === undefined) return;
 
-    xhr.ontimeout = () => {
-        callback(context, false, 'Connection to the bridge timed out.');
-    };
+        for(let i = 0; i < this.devices.length; i++){
+            if(this.devices[i].url === url){
 
-    xhr.onload = () => {
-        if (xhr.readyState !== XMLHttpRequest.DONE || xhr.status !== 200) callback(context, false, 'Could not connect to tasmota device.');
-        if (xhr.response === undefined || xhr.response == null) callback(context, false, 'Bridge response is undefined or null.');
+                // check ob gleicher context
+                if(!this.devices[i].contexts.includes(context)) this.devices[i].contexts.push(context);
 
-        let result = xhr.response;
+                return this.devices[i];
+            }
+        }
 
-        console.log("result: ",xhr.response);
+        // Wenn Device nicht existiert, anlegen
+        let tmp = new Device(context, url);
 
-        callback(context, true, result);
-    };
+        this.devices.push(tmp);
+        return tmp;
+    }
 
-    return xhr;
+    removeContext(context, url){
+        if(url === undefined) return;
+
+        for(let i = 0; i < this.devices.length; i++) {
+            if (this.devices[i].url === url) {
+                this.devices[i].contexts = removeItemOnce(this.devices[i].contexts, context);
+                if(this.devices[i].contexts.length === 0) {
+                    this.devices = removeItemOnce(this.devices, this.devices[i]);
+                }
+            }
+        }
+    }
 }
 
+function removeItemOnce(arr, value) {
+    const index = arr.indexOf(value);
+    if (index > -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
+}
+
+class Device {
+    queue = [];
+    TimerPid = -1;
+    url = "";
+    color = 0;
+    brightness = 0;
+    power = 0;
+    temp = 0;
+    contexts = [];
+
+    constructor(context, url){
+        this.contexts = [ context ];
+        this.url = url;
+    }
+
+    send(payload, callback, noQueue) {
+        if(noQueue) {
+            this.doRequest({payload, callback});
+
+        } else {
+            this.queue.push({payload, callback});
+            this.tick();
+        }
+    }
+
+    tick() {
+        if(this.TimerPid >= 0) clearTimeout(this.TimerPid);
+
+        this.TimerPid = setTimeout(()=>{
+            this.TimerPid = -1;
+            let tmp = this.queue.pop(); // nur den letzen holen und array leeren
+            this.queue = [];
+
+            this.doRequest(tmp);
+
+        }, 300);
+    }
+
+    doRequest(tmp){
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'json';
+        xhr.timeout = 2000;
+
+        xhr.onerror = () => {
+            tmp.callback(this, false, 'Unable to connect to the bridge.');
+        };
+
+        xhr.ontimeout = () => {
+            tmp.callback(this, false, 'Connection to the bridge timed out.');
+        };
+
+        xhr.onload = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE || xhr.status !== 200) tmp.callback(this, false, 'Could not connect to tasmota device.');
+            if (xhr.response === undefined || xhr.response == null) tmp.callback(this, false, 'Bridge response is undefined or null.');
+
+            let result = xhr.response;
+
+            console.log("result: ",xhr.response);
+
+            tmp.callback(this, true, result);
+        };
+
+        xhr.open('GET', this.url + tmp.payload, true);
+        xhr.send();
+    }
+
+    forEachContext(fnc){
+        for(let i = 0; i < this.contexts.length; i++){
+            fnc(this.contexts[i]);
+        }
+    }
+}

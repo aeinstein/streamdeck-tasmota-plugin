@@ -125,7 +125,7 @@ function firePress(context, payload){
 
     let val = 0;
 
-    const t_device = cache.getOrAddDevice(payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings.url);
 
     switch(viewStates[context]){
         case 0:
@@ -147,8 +147,8 @@ function firePress(context, payload){
     });
 }
 
-updateValue = (context, success, result)=>{
-    console.log(result);
+updateValue = (context, url, success, result)=>{
+    console.log(context, url, success, result);
 
     if(!success) {
         $SD.showAlert(context);
@@ -159,7 +159,7 @@ updateValue = (context, success, result)=>{
 
 
 colorAction.onDialRotate(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings.url);
 
     t_device.color += payload.ticks;
 
