@@ -101,6 +101,7 @@ class Device {
     brightness = 0;
     power = 0;
     temp = 0;
+    HSBColor = [0,0,0];
     contexts = [];
 
     constructor(context, url){

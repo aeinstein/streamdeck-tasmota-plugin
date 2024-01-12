@@ -1,8 +1,8 @@
-setColor = (context, url, pos, color, callback)=>{
-    console.log("Color: " + color);
+setColor = (context, url, pos, callback)=>{
+    console.log("Color: " + pos);
 
     $SD.setFeedback(context, {
-        "value": color,
+        "value": pos,
         "indicator": pos
     });
 
@@ -12,7 +12,19 @@ setColor = (context, url, pos, color, callback)=>{
     }
 
     const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=Color%20" + color, callback);
+    //t_device.send("/cm?cmnd=Color%20" + color, callback);
+    t_device.send("/cm?cmnd=HSBColor1%20" + pos, callback);
+
+}
+
+getHSBColor = (context, url, callback) =>{
+    if(url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, url);
+    t_device.send("/cm?cmnd=HSBColor", callback, true);
 }
 
 setBrightness = (context, url, brightness, callback)=>{
@@ -29,27 +41,8 @@ setBrightness = (context, url, brightness, callback)=>{
     }
 
     const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=Dimmer%20" + brightness, callback);
-}
-
-getBrightness = (context, url, callback) =>{
-    if(url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=Dimmer", callback, true);
-}
-
-getTemperature = (context, url, callback) =>{
-    if(url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=HSBColor2", callback, true);
+    //t_device.send("/cm?cmnd=Dimmer%20" + brightness, callback);
+    t_device.send("/cm?cmnd=HSBColor3%20" + brightness, callback);
 }
 
 setTemperature = (context, url, pos, callback)=>{
@@ -69,28 +62,6 @@ setTemperature = (context, url, pos, callback)=>{
     const t_device = cache.getOrAddDevice(context, url);
     t_device.send("/cm?cmnd=HSBColor2%20" + pos, callback);
 }
-
-
-
-
-
-
-
-getColor = (context, url, callback) =>{
-    if(url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=Color", callback, true);
-}
-
-
-
-
-
-
 
 const cache = new Cache();
 
