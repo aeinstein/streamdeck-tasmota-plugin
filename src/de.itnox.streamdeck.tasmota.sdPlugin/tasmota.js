@@ -1,33 +1,44 @@
-setColor = (context, url, pos, callback)=>{
-    console.log("Color: " + pos);
+setColor = (context, settings, color, callback, noQueue)=>{
+    console.log("setColor: " + color);
+
+    color = color.replace("#", "");
+
+    $SD.setFeedback(context, {
+        "value": color,
+        "indicator": color
+    });
+
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    let payload = "/cm?cmnd=Color%20" + color
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback, noQueue);
+}
+
+setHSBColor = (context, settings, pos, callback)=>{
+    console.log("setHSBColor: " + settings.color);
 
     $SD.setFeedback(context, {
         "value": pos,
         "indicator": pos
     });
 
-    if(url === "") {
+    if(settings.url === "") {
         $SD.showAlert(context);
         return;
     }
 
-    const t_device = cache.getOrAddDevice(context, url);
-    //t_device.send("/cm?cmnd=Color%20" + color, callback);
-    t_device.send("/cm?cmnd=HSBColor1%20" + pos, callback);
-
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    let payload = "/cm?cmnd=HSBColor1%20" + pos;
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback);
 }
 
-getHSBColor = (context, url, callback) =>{
-    if(url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=HSBColor", callback, true);
-}
-
-setBrightness = (context, url, brightness, callback)=>{
+setBrightness = (context, settings, brightness, callback, noQueue)=>{
     console.log("Brightness: " + brightness);
 
     $SD.setFeedback(context, {
@@ -35,17 +46,18 @@ setBrightness = (context, url, brightness, callback)=>{
         "indicator": brightness
     });
 
-    if(url === "") {
+    if(settings.url === "") {
         $SD.showAlert(context);
         return;
     }
 
-    const t_device = cache.getOrAddDevice(context, url);
-    //t_device.send("/cm?cmnd=Dimmer%20" + brightness, callback);
-    t_device.send("/cm?cmnd=HSBColor3%20" + brightness, callback);
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    let payload = "/cm?cmnd=HSBColor3%20" + brightness;
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback, noQueue);
 }
 
-setTemperature = (context, url, pos, callback)=>{
+setSaturation = (context, settings, pos, callback, noQueue)=>{
     console.log("saturation: " + pos);
 
     $SD.setFeedback(context, {
@@ -53,14 +65,27 @@ setTemperature = (context, url, pos, callback)=>{
         "indicator": pos
     });
 
-
-    if(url === "") {
+    if(settings.url === "") {
         $SD.showAlert(context);
         return;
     }
 
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=HSBColor2%20" + pos, callback);
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    let payload = "/cm?cmnd=HSBColor2%20" + pos;
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback, noQueue);
+}
+
+getHSBColor = (context, settings, callback) =>{
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    let payload = "/cm?cmnd=HSBColor";
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback, true);
 }
 
 const cache = new Cache();

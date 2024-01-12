@@ -111,8 +111,8 @@
 		},
 
 		{
-			"Name": "RGB Device",
-			"Icon": "actions/assets/temperature",
+			"Name": "HUE Control",
+			"Icon": "actions/assets/color",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/rgb.json",
@@ -124,7 +124,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/temperature"
+					"Image": "actions/assets/color"
 				}
 			],
 			"Tooltip": "This is an example tooltip",

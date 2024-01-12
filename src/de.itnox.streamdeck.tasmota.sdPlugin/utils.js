@@ -129,7 +129,7 @@ class Device {
 
             this.doRequest(tmp);
 
-        }, 300);
+        }, 200);
     }
 
     doRequest(tmp){
