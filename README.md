@@ -17,6 +17,12 @@ optimized for SD+
 - granular control of RGBWW Leds
 - store static values
 - realtime reading on control appearance
+- Same parameters over different controls are sychronized 
+
+
+## Tested with
+- H801 RGBWW
+- NOUS A1T Outlet with Power Meter
 
 
 ## Quick Start Guide
@@ -24,5 +30,8 @@ optimized for SD+
 * Pull your desired function on your control set
 * Enter URL and credentials(optionally) of a tasmota device
 * state is automatically read
+
+
+
 
 ![](setup.PNG)

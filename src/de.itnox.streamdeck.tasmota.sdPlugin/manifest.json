@@ -5,7 +5,7 @@
 	"Description": "Control your Tasmota devices with your Stream Deck.",
 	"Name": "Tasmota",
 	"Icon": "actions/assets/tasmota_logo",
-	"URL": "https://github.com/aeinstein",
+	"URL": "https://github.com/aeinstein/streamdeck-tasmota-plugin",
 	"Version": "0.0.1-prealpha",
 	"Software": {
 		"MinimumVersion": "5.0"

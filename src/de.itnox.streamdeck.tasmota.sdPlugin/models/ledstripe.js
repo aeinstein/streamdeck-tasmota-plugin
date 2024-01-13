@@ -163,43 +163,6 @@ function firePress({action, context, device, event, payload}){
     }
 }
 
-updateValue = (t_device, success, result)=>{
-    console.log(t_device, success, result);
-
-    if(!success) {
-        t_device.forEachContext((context)=>{
-            $SD.showAlert(context);
-        });
-        return;
-    }
-
-    t_device.POWER = result.POWER !== "OFF";
-    t_device.Dimmer = result.Dimmer;
-    //t_device.Color = result.Color;
-
-    // WHY is HSBColor not an array ;!?!?! grrr
-    let hsb = result.HSBColor;
-    let ff = hsb.split(",");
-    t_device.HSBColor[0] = Number(ff[0]);
-    t_device.HSBColor[1] = Number(ff[1]);
-    t_device.HSBColor[2] = Number(ff[2]);
-
-    t_device.forEachContext((context)=>{
-        console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]]);
-
-        if(viewStates[context] === undefined) {
-            // Regler kein Multi
-
-        }
-
-        $SD.setFeedback(context, {
-            "value": t_device.HSBColor[viewStates[context]],
-            "indicator": t_device.HSBColor[viewStates[context]]
-        });
-    });
-}
-
-
 
 
 
@@ -228,7 +191,10 @@ colorAction.onWillAppear(({action, context, device, event, payload})=>{
     getHSBColor(context, payload.settings, updateValue);
 })
 
-
+colorAction.onWillDisappear(({action, context, device, event, payload}) =>{
+    console.log( action, context, device, event, payload);
+    cache.removeContext(context, payload.settings.url);
+});
 
 
 
@@ -257,7 +223,10 @@ brightnessAction.onWillAppear(({action, context, device, event, payload})=>{
     getHSBColor(context, payload.settings, updateValue);
 })
 
-
+brightnessAction.onWillDisappear(({action, context, device, event, payload}) =>{
+    console.log( action, context, device, event, payload);
+    cache.removeContext(context, payload.settings.url);
+});
 
 
 saturationAction.onDialRotate(({ action, context, device, event, payload }) => {
@@ -285,3 +254,7 @@ saturationAction.onWillAppear(({action, context, device, event, payload})=>{
     getHSBColor(context, payload.settings, updateValue);
 })
 
+saturationAction.onWillDisappear(({action, context, device, event, payload}) =>{
+    console.log( action, context, device, event, payload);
+    cache.removeContext(context, payload.settings.url);
+});

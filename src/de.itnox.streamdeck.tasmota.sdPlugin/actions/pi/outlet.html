@@ -22,21 +22,32 @@
             </div>
 
             <div class="sdpi-item">
-                <div data-localize class="sdpi-item-label" title="URL of the tasmota device">Login</div>
-                <input data-localize class="sdpi-item-value" name="user" type="text" value="" title="Login" placeholder="no authentication" />
-            </div>
-
-            <div class="sdpi-item">
                 <div data-localize class="sdpi-item-label" title="URL of the tasmota device">Password</div>
                 <input data-localize class="sdpi-item-value" name="password" type="text" value="" title="Password" />
             </div>
 
-            <div type="checkbox" class="sdpi-item">
-                <div class="sdpi-item-value ">
-                    <input id="chk1" type="checkbox" value="1" name="displayPower">
-                    <label for="chk1"><span></span>Display power as title</label>
-                </div>
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Title Mode</div>
+                <select class="sdpi-item-value" name="titleMode">
+                    <option value="0">Power State</option>
+                    <option value="1">current Power</option>
+                    <option value="2">today Energy</option>
+                    <option value="3">total Energy</option>
+                </select>
             </div>
+
+            <div class="sdpi-item">
+                <div class="sdpi-item-label">Auto Refresh</div>
+                <select class="sdpi-item-value" name="autoRefresh">
+                    <option value="0">0 - Disabled</option>
+                    <option value="5">5 Seconds</option>
+                    <option value="30">30 Seconds</option>
+                    <option value="60">1 Minute</option>
+                    <option value="120">2 Minutes</option>
+                    <option value="300">5 Minutes</option>
+                </select>
+            </div>
+
         </form>
     </div>
 
@@ -55,3 +66,4 @@
 </body>
 
 </html>
+

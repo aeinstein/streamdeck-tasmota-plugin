@@ -6,46 +6,28 @@ const toggleAction = new Action('de.itnox.streamdeck.tasmota.toggle');
 toggleAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     t_device.POWER = !t_device.POWER;
 
-    setPower(context, payload.settings, t_device.POWER, updateOutlet);
+    setPower(context, payload.settings, t_device.POWER, updateValue);
 });
 
 toggleAction.onWillAppear(({action, context, device, event, payload})=>{
-    getOutlet(context, payload.settings, updateOutlet);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+
+    if(payload.settings.autoRefresh >= 0) {
+        t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
+            getStatus(context, payload.settings, updateValue);
+        });
+    } else {
+        getPower(context, payload.settings, updateValue);
+    }
 });
 
 toggleAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
-    cache.removeContext(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+    t_device.setAutoRefresh(0);
+    cache.removeContext(context, payload.settings);
 });
-
-updateOutlet = (t_device, success, result)=>{
-    console.log(t_device, success, result);
-
-    if(!success) {
-        t_device.forEachContext((context)=>{
-            $SD.showAlert(context);
-        });
-        return;
-    }
-
-    if(result.POWER === "OFF") {
-        t_device.forEachContext((context)=>{
-            $SD.setState(context, 0);
-            $SD.setTitle(context, "OFF");
-        });
-
-        t_device.POWER = 0;
-
-    } else {
-        t_device.forEachContext((context)=>{
-            $SD.setState(context, 1);
-            $SD.setTitle(context, "ON");
-        });
-
-        t_device.POWER = 1;
-    }
-}

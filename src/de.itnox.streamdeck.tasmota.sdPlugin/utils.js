@@ -38,7 +38,6 @@ percent2RGB = (col) =>{
         blue.toString(16).padStart(2, '0');
 }
 
-
 interpolateValue = (start_color, end_color, start_val, end_val, val)=>{
     if(start_color == end_color) return start_color;
 
@@ -48,14 +47,22 @@ interpolateValue = (start_color, end_color, start_val, end_val, val)=>{
     return Math.floor(start_color + (step_size *val));
 }
 
+removeItemOnce = (arr, value) => {
+    const index = arr.indexOf(value);
+    if (index > -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
+}
+
 class Cache {
     devices = [];
 
-    getOrAddDevice(context, url) {
-        if(url === undefined) return;
+    getOrAddDevice(context, settings) {
+        if(settings.url === undefined) return;
 
         for(let i = 0; i < this.devices.length; i++){
-            if(this.devices[i].url === url){
+            if(this.devices[i].url === settings.url){
 
                 // check ob gleicher context
                 if(!this.devices[i].contexts.includes(context)) this.devices[i].contexts.push(context);
@@ -65,17 +72,17 @@ class Cache {
         }
 
         // Wenn Device nicht existiert, anlegen
-        let tmp = new Device(context, url);
+        let tmp = new Device(context, settings);
 
         this.devices.push(tmp);
         return tmp;
     }
 
-    removeContext(context, url){
-        if(url === undefined) return;
+    removeContext(context, settings){
+        if(settings.url === undefined) return;
 
         for(let i = 0; i < this.devices.length; i++) {
-            if (this.devices[i].url === url) {
+            if (this.devices[i].url === settings.url) {
                 this.devices[i].contexts = removeItemOnce(this.devices[i].contexts, context);
                 if(this.devices[i].contexts.length === 0) {
                     this.devices = removeItemOnce(this.devices, this.devices[i]);
@@ -85,17 +92,12 @@ class Cache {
     }
 }
 
-function removeItemOnce(arr, value) {
-    const index = arr.indexOf(value);
-    if (index > -1) {
-        arr.splice(index, 1);
-    }
-    return arr;
-}
+
 
 class Device {
     queue = [];
     TimerPid = -1;
+    RefreshPid = -1;
     url = "";
     Color = 0;
     Dimmer = 0;
@@ -103,10 +105,12 @@ class Device {
     CT = 0;
     HSBColor = [0,0,0];
     contexts = [];
+    settings = {};
 
-    constructor(context, url){
+    constructor(context, settings){
         this.contexts = [ context ];
-        this.url = url;
+        this.settings = settings;
+        this.url = settings.url;
     }
 
     send(payload, callback, noQueue) {
@@ -163,6 +167,19 @@ class Device {
     forEachContext(fnc){
         for(let i = 0; i < this.contexts.length; i++){
             fnc(this.contexts[i]);
+        }
+    }
+
+    setAutoRefresh(secs, callback){
+        console.log("setAutoRefresh: " + secs);
+
+        if(secs > 0) {
+            this.RefreshPid = setInterval(callback, secs * 1000);
+        } else {
+            if(this.RefreshPid >= 0) {
+                clearInterval(this.RefreshPid);
+                this.RefreshPid = -1;
+            }
         }
     }
 }
