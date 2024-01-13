@@ -20,7 +20,7 @@ setColor = (context, settings, color, callback, noQueue)=>{
 }
 
 setHSBColor = (context, settings, pos, callback)=>{
-    console.log("setHSBColor: " + settings.color);
+    console.log("setHSBColor: " + pos);
 
     $SD.setFeedback(context, {
         "value": pos,
@@ -86,6 +86,32 @@ getHSBColor = (context, settings, callback) =>{
     let payload = "/cm?cmnd=HSBColor";
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
     t_device.send(payload, callback, true);
+}
+
+getOutlet = (context, settings, callback) =>{
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    let payload = "/cm?cmnd=Power";
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback);
+}
+
+setPower = (context, settings, power, callback) => {
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    let payload = "/cm?cmnd=Power%20Off";
+    if(power) payload = "/cm?cmnd=Power%20On";
+
+    const t_device = cache.getOrAddDevice(context, settings.url);
+    if(settings.password) payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback);
 }
 
 const cache = new Cache();

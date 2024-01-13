@@ -8,42 +8,19 @@ toggleAction.onKeyUp(({action, context, device, event, payload})=>{
 
     const t_device = cache.getOrAddDevice(context, payload.settings.url);
 
-    t_device.power = !t_device.power;
+    t_device.POWER = !t_device.POWER;
 
-    setOutlet(context, payload.settings.url, t_device.power, updateOutlet);
+    setPower(context, payload.settings, t_device.POWER, updateOutlet);
 });
 
 toggleAction.onWillAppear(({action, context, device, event, payload})=>{
-    getOutlet(context, payload.settings.url, updateOutlet);
+    getOutlet(context, payload.settings, updateOutlet);
 });
 
 toggleAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
     cache.removeContext(context, payload.settings.url);
 });
-
-getOutlet = (context, url, callback) =>{
-    if(url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send("/cm?cmnd=Power", callback);
-}
-
-setOutlet = (context, url, power, callback) => {
-    if(url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    let payload = "/cm?cmnd=Power%20Off";
-    if(power) payload = "/cm?cmnd=Power%20On";
-
-    const t_device = cache.getOrAddDevice(context, url);
-    t_device.send(payload, callback);
-}
 
 updateOutlet = (t_device, success, result)=>{
     console.log(t_device, success, result);
@@ -61,7 +38,7 @@ updateOutlet = (t_device, success, result)=>{
             $SD.setTitle(context, "OFF");
         });
 
-        t_device.power = 0;
+        t_device.POWER = 0;
 
     } else {
         t_device.forEachContext((context)=>{
@@ -69,6 +46,6 @@ updateOutlet = (t_device, success, result)=>{
             $SD.setTitle(context, "ON");
         });
 
-        t_device.power = 1;
+        t_device.POWER = 1;
     }
 }

@@ -90,13 +90,13 @@
 		},
 
 		{
-			"Name": "Temperature",
+			"Name": "Saturation",
 			"Icon": "actions/assets/temperature",
 			"Controllers": ["Encoder"],
 			"Encoder": {
-				"layout": "layouts/temp.json",
+				"layout": "layouts/saturation.json",
 				"TriggerDescription": {
-					"Rotate": "Color Temp",
+					"Rotate": "Saturation",
 					"Push": "Toggle Min/Max"
 				}
 			},
@@ -106,12 +106,12 @@
 				}
 			],
 			"Tooltip": "This is an example tooltip",
-			"UUID": "de.itnox.streamdeck.tasmota.temperature",
+			"UUID": "de.itnox.streamdeck.tasmota.saturation",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		},
 
 		{
-			"Name": "HUE Control",
+			"Name": "HSB Control",
 			"Icon": "actions/assets/color",
 			"Controllers": ["Encoder"],
 			"Encoder": {

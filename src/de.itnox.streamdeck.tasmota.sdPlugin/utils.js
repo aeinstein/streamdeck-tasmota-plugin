@@ -97,10 +97,10 @@ class Device {
     queue = [];
     TimerPid = -1;
     url = "";
-    color = 0;
-    brightness = 0;
-    power = 0;
-    temp = 0;
+    Color = 0;
+    Dimmer = 0;
+    POWER = 0;
+    CT = 0;
     HSBColor = [0,0,0];
     contexts = [];
 
