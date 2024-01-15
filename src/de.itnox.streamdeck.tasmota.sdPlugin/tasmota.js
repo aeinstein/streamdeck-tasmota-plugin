@@ -1,4 +1,4 @@
-setColor = (context, settings, color, callback, noQueue)=>{
+setColor = (action, context, settings, color, callback, noQueue)=>{
     console.log("setColor: " + color);
 
     color = color.replace("#", "");
@@ -16,10 +16,10 @@ setColor = (context, settings, color, callback, noQueue)=>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=Color%20" + color
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback, noQueue);
+    t_device.send(action, payload, callback, noQueue);
 }
 
-setHSBColor = (context, settings, pos, callback)=>{
+setHSBColor = (action, context, settings, pos, callback)=>{
     console.log("setHSBColor: " + pos);
 
     $SD.setFeedback(context, {
@@ -35,10 +35,10 @@ setHSBColor = (context, settings, pos, callback)=>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=HSBColor1%20" + pos;
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
+    t_device.send(action, payload, callback);
 }
 
-setBrightness = (context, settings, brightness, callback, noQueue)=>{
+setBrightness = (action, context, settings, brightness, callback, noQueue)=>{
     console.log("Brightness: " + brightness);
 
     $SD.setFeedback(context, {
@@ -54,10 +54,10 @@ setBrightness = (context, settings, brightness, callback, noQueue)=>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=HSBColor3%20" + brightness;
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback, noQueue);
+    t_device.send(action, payload, callback, noQueue);
 }
 
-setSaturation = (context, settings, pos, callback, noQueue)=>{
+setSaturation = (action, context, settings, pos, callback, noQueue)=>{
     console.log("saturation: " + pos);
 
     $SD.setFeedback(context, {
@@ -73,10 +73,10 @@ setSaturation = (context, settings, pos, callback, noQueue)=>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=HSBColor2%20" + pos;
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback, noQueue);
+    t_device.send(action, payload, callback, noQueue);
 }
 
-getHSBColor = (context, settings, callback) =>{
+getHSBColor = (action, context, settings, callback) =>{
     if(settings.url === "") {
         $SD.showAlert(context);
         return;
@@ -85,34 +85,10 @@ getHSBColor = (context, settings, callback) =>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=HSBColor";
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
+    t_device.send(action, payload, callback);
 }
 
-getWhite = (context, settings, callback) =>{
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=White";
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
-}
-
-getCT = (context, settings, callback) =>{
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=CT";
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
-}
-
-setWhite = (context, settings, white, callback, noQueue)=>{
+setWhite = (action, context, settings, white, callback, noQueue)=>{
     console.log("White: " + white);
 
     $SD.setFeedback(context, {
@@ -128,10 +104,10 @@ setWhite = (context, settings, white, callback, noQueue)=>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=White%20" + white;
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback, noQueue);
+    t_device.send(action, payload, callback, noQueue);
 }
 
-setCT = (context, settings, white, callback, noQueue)=>{
+setCT = (action, context, settings, white, callback, noQueue)=>{
     console.log("White: " + white);
 
     $SD.setFeedback(context, {
@@ -147,10 +123,10 @@ setCT = (context, settings, white, callback, noQueue)=>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=CT%20" + white;
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback, noQueue);
+    t_device.send(action, payload, callback, noQueue);
 }
 
-getPower = (context, settings, callback) =>{
+getPower = (action, context, settings, callback) =>{
     if(settings.url === "") {
         $SD.showAlert(context);
         return;
@@ -159,10 +135,10 @@ getPower = (context, settings, callback) =>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=Power";
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
+    t_device.send(action, payload, callback);
 }
 
-getStatus = (context, settings, callback) =>{
+getStatus = (action, context, settings, callback) =>{
     if(settings.url === "") {
         $SD.showAlert(context);
         return;
@@ -171,10 +147,10 @@ getStatus = (context, settings, callback) =>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=Status%208";
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
+    t_device.send(action, payload, callback);
 }
 
-setPower = (context, settings, power, callback) => {
+setPower = (action, context, settings, power, callback) => {
     if(settings.url === "") {
         $SD.showAlert(context);
         return;
@@ -185,11 +161,11 @@ setPower = (context, settings, power, callback) => {
 
     const t_device = cache.getOrAddDevice(context, settings);
     if(settings.password) payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback);
+    t_device.send(action, payload, callback);
 }
 
-updateValue = (t_device, success, result)=>{
-    console.log(t_device, success, result);
+updateValue = (t_device, success, result, senderAction)=>{
+    console.log(t_device, success, result, senderAction);
 
     if(!success) {
         t_device.forEachContext((context)=>{
@@ -266,10 +242,33 @@ updateValue = (t_device, success, result)=>{
             // Regler kein Multi
 
         } else {
-            $SD.setFeedback(context, {
-                "value": t_device.HSBColor[viewStates[context]],
-                "indicator": t_device.HSBColor[viewStates[context]]
-            });
+            switch(senderAction){
+                case "de.itnox.streamdeck.tasmota.wwdevice":
+                    switch(viewStates[context]){
+                    case 0:
+                        $SD.setFeedback(context, {
+                            "value": t_device.CT,
+                            "indicator": t_device.CT
+                        });
+                        break;
+
+                    case 1:
+                        $SD.setFeedback(context, {
+                            "value": t_device.White,
+                            "indicator": t_device.White
+                        });
+                        break;
+                    }
+                    break;
+
+                default:
+                    $SD.setFeedback(context, {
+                        "value": t_device.HSBColor[viewStates[context]],
+                        "indicator": t_device.HSBColor[viewStates[context]]
+                    });
+                    break;
+            }
+
         }
     });
 }

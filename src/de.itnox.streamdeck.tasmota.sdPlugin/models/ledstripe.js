@@ -26,14 +26,14 @@ const layoutsww = [
 fixedAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    setSaturation(context, payload.settings, 100, updateValue, true);
+    setSaturation(action, context, payload.settings, 100, updateValue, true);
 
     if(payload.settings.color != "") {
-        setColor(context, payload.settings, payload.settings.color, updateValue, true);
+        setColor(action, context, payload.settings, payload.settings.color, updateValue, true);
     }
 
     if(payload.settings.brightness != "") {
-        setBrightness(context, payload.settings, payload.settings.brightness, updateValue, true);
+        setBrightness(action, context, payload.settings, payload.settings.brightness, updateValue, true);
     }
 });
 
@@ -57,11 +57,11 @@ wwaction.onWillAppear(({action, context, device, event, payload})=>{
 
     if(payload.settings.autoRefresh >= 0) {
         t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
-            getWhite(context, payload.settings, updateValue);
+            getHSBColor(action, context, payload.settings, updateValue);
         });
     }
 
-    getWhite(context, payload.settings, updateValue);
+    getHSBColor(action, context, payload.settings, updateValue);
 })
 
 wwaction.onWillDisappear(({action, context, device, event, payload}) =>{
@@ -94,23 +94,23 @@ wwaction.onDialRotate(({ action, context, device, event, payload }) => {
     const t_device = cache.getOrAddDevice(context, payload.settings);
 
     switch(viewStates[context]){
-        case 0:
-            t_device.CT += payload.ticks;
+    case 0:
+        t_device.CT += payload.ticks;
 
-            if(t_device.CT > 500) t_device.CT = 157;
-            if(t_device.CT < 153) t_device.CT = 153;
+        if(t_device.CT > 500) t_device.CT = 500;
+        if(t_device.CT < 153) t_device.CT = 153;
 
-            setCT(context, payload.settings, t_device.CT, updateValue);
-            break;
+        setCT(action, context, payload.settings, t_device.CT, updateValue);
+        break;
 
-        case 1:
-            t_device.White += payload.ticks;
+    case 1:
+        t_device.White += payload.ticks;
 
-            if(t_device.White > 100) t_device.White = 100;
-            if(t_device.White < 0) t_device.White = 0;
+        if(t_device.White > 100) t_device.White = 100;
+        if(t_device.White < 0) t_device.White = 0;
 
-            setWhite(context, payload.settings, t_device.White, updateValue);
-            break;
+        setWhite(action, context, payload.settings, t_device.White, updateValue);
+        break;
     }
 });
 
@@ -126,11 +126,11 @@ rgbaction.onWillAppear(({action, context, device, event, payload})=>{
 
     if(payload.settings.autoRefresh >= 0) {
         t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
-            getHSBColor(context, payload.settings, updateValue);
+            getHSBColor(action, context, payload.settings, updateValue);
         });
     }
 
-    getHSBColor(context, payload.settings, updateValue);
+    getHSBColor(action, context, payload.settings, updateValue);
 })
 
 rgbaction.onWillDisappear(({action, context, device, event, payload}) =>{
@@ -174,7 +174,7 @@ rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
                 t_device.HSBColor[0] += 361;
             }
 
-            setHSBColor(context, payload.settings, t_device.HSBColor[0], updateValue);
+            setHSBColor(action, context, payload.settings, t_device.HSBColor[0], updateValue);
             break;
 
         case 1:
@@ -188,7 +188,7 @@ rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
                 t_device.HSBColor[1] = 0;
             }
 
-            setSaturation(context, payload.settings, t_device.HSBColor[1], updateValue);
+            setSaturation(action, context, payload.settings, t_device.HSBColor[1], updateValue);
             break;
 
         case 2:
@@ -202,7 +202,7 @@ rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
                 t_device.HSBColor[2] = 0;
             }
 
-            setBrightness(context, payload.settings, t_device.HSBColor[2], updateValue);
+            setBrightness(action, context, payload.settings, t_device.HSBColor[2], updateValue);
             break;
     }
 
@@ -291,7 +291,7 @@ colorAction.onDialRotate(({ action, context, device, event, payload }) => {
     if(t_device.HSBColor[0] > 360) t_device.HSBColor[0] -= 361;
     if(t_device.HSBColor[0] < 0) t_device.HSBColor[0] += 361;
 
-    setHSBColor(context, payload.settings, t_device.HSBColor[0], updateValue);
+    setHSBColor(action, context, payload.settings, t_device.HSBColor[0], updateValue);
 });
 
 colorAction.onDialUp(({ action, context, device, event, payload }) => {
@@ -300,12 +300,12 @@ colorAction.onDialUp(({ action, context, device, event, payload }) => {
     if(t_device.HSBColor[0] > 0) t_device.HSBColor[0] = 0;
     else t_device.HSBColor[0] = 180;
 
-    setHSBColor(context, payload.settings, t_device.HSBColor[0], updateValue);
+    setHSBColor(action, context, payload.settings, t_device.HSBColor[0], updateValue);
 });
 
 colorAction.onWillAppear(({action, context, device, event, payload})=>{
     viewStates[context] = 0;
-    getHSBColor(context, payload.settings, updateValue);
+    getHSBColor(action, context, payload.settings, updateValue);
 })
 
 colorAction.onWillDisappear(({action, context, device, event, payload}) =>{
@@ -323,7 +323,7 @@ brightnessAction.onDialRotate(({ action, context, device, event, payload }) => {
     if(t_device.HSBColor[2] > 100) t_device.HSBColor[2] = 100;
     if(t_device.HSBColor[2] < 0) t_device.HSBColor[2] = 0;
 
-    setBrightness(context, payload.settings, t_device.HSBColor[2], updateValue);
+    setBrightness(action, context, payload.settings, t_device.HSBColor[2], updateValue);
 });
 
 brightnessAction.onDialUp(({ action, context, device, event, payload }) => {
@@ -332,12 +332,12 @@ brightnessAction.onDialUp(({ action, context, device, event, payload }) => {
     if(t_device.HSBColor[2] > 0) t_device.HSBColor[2] = 0;
     else t_device.HSBColor[2] = 100;
 
-    setBrightness(context, payload.settings, t_device.HSBColor[2], updateValue, true);
+    setBrightness(action, context, payload.settings, t_device.HSBColor[2], updateValue, true);
 });
 
 brightnessAction.onWillAppear(({action, context, device, event, payload})=>{
     viewStates[context] = 2;
-    getHSBColor(context, payload.settings, updateValue);
+    getHSBColor(action, context, payload.settings, updateValue);
 })
 
 brightnessAction.onWillDisappear(({action, context, device, event, payload}) =>{
@@ -354,7 +354,7 @@ saturationAction.onDialRotate(({ action, context, device, event, payload }) => {
     if(t_device.HSBColor[1] > 100) t_device.HSBColor[1] = 100;
     if(t_device.HSBColor[1] < 0) t_device.HSBColor[1] = 0;
 
-    setSaturation(context, payload.settings, t_device.HSBColor[1], updateValue);
+    setSaturation(action, context, payload.settings, t_device.HSBColor[1], updateValue);
 });
 
 saturationAction.onDialUp(({ action, context, device, event, payload }) => {
@@ -363,12 +363,12 @@ saturationAction.onDialUp(({ action, context, device, event, payload }) => {
     if(t_device.HSBColor[1] > 0) t_device.HSBColor[1] = 0;
     else t_device.HSBColor[1] = 100;
 
-    setBrightness(context, payload.settings, t_device.HSBColor[1], updateValue, true);
+    setBrightness(action, context, payload.settings, t_device.HSBColor[1], updateValue, true);
 });
 
 saturationAction.onWillAppear(({action, context, device, event, payload})=>{
     viewStates[context] = 2;
-    getHSBColor(context, payload.settings, updateValue);
+    getHSBColor(action, context, payload.settings, updateValue);
 })
 
 saturationAction.onWillDisappear(({action, context, device, event, payload}) =>{

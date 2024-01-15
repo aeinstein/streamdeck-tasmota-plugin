@@ -24,13 +24,13 @@
       "key": "indicator",
       "type": "gbar",
       "rect": [76, 74, 108, 20],
-      "value": 157,
+      "value": 153,
       "subtype": 4,
       "bar_h": 12,
       "border_w": 0,
       "bar_bg_c": "0:#ffffff,1:#ffae00",
       "range": {
-        "min": 157,
+        "min": 153,
         "max": 500
       }
     }

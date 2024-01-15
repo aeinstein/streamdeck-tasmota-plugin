@@ -106,6 +106,7 @@ class Device {
     HSBColor = [0,0,0];
     contexts = [];
     settings = {};
+    type = "";
 
     constructor(context, settings){
         this.contexts = [ context ];
@@ -113,9 +114,9 @@ class Device {
         this.url = settings.url;
     }
 
-    send(payload, callback, noQueue) {
+    send(senderAction, payload, callback, noQueue) {
         if(noQueue) {
-            this.doRequest({payload, callback});
+            this.doRequest({payload, callback, senderAction});
 
         } else {
             for(let i=0; i < this.queue.length; i++){
@@ -125,7 +126,7 @@ class Device {
                 }
             }
 
-            this.queue.push({payload, callback});
+            this.queue.push({payload, callback, senderAction});
             this.tick();
         }
     }
@@ -164,7 +165,7 @@ class Device {
 
             console.log("result: ",xhr.response);
 
-            tmp.callback(this, true, result);
+            tmp.callback(this, true, result, tmp.senderAction);
         };
 
         xhr.open('GET', this.url + tmp.payload, true);
@@ -182,6 +183,7 @@ class Device {
 
         if(secs > 0) {
             this.RefreshPid = setInterval(callback, secs * 1000);
+
         } else {
             if(this.RefreshPid >= 0) {
                 clearInterval(this.RefreshPid);

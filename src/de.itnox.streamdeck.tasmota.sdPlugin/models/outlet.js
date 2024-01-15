@@ -10,17 +10,17 @@ toggleAction.onKeyUp(({action, context, device, event, payload})=>{
 
     t_device.POWER = !t_device.POWER;
 
-    setPower(context, payload.settings, t_device.POWER, updateValue);
+    setPower(action, context, payload.settings, t_device.POWER, updateValue);
 });
 
 toggleAction.onWillAppear(({action, context, device, event, payload})=>{
     const t_device = cache.getOrAddDevice(context, payload.settings);
 
-    getStatus(context, payload.settings, updateValue);
+    getStatus(action, context, payload.settings, updateValue);
 
     if(payload.settings.autoRefresh >= 0) {
         t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
-            getStatus(context, payload.settings, updateValue);
+            getStatus(action, context, payload.settings, updateValue);
         });
     }
 });
