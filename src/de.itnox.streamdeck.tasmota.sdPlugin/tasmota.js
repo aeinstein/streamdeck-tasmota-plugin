@@ -85,7 +85,7 @@ getHSBColor = (context, settings, callback) =>{
     const t_device = cache.getOrAddDevice(context, settings);
     let payload = "/cm?cmnd=HSBColor";
     if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(payload, callback, true);
+    t_device.send(payload, callback);
 }
 
 getPower = (context, settings, callback) =>{

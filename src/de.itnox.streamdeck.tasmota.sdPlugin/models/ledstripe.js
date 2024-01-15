@@ -61,6 +61,8 @@ ledaction.onWillAppear(({action, context, device, event, payload})=>{
 
 ledaction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+    t_device.setAutoRefresh(0);
     cache.removeContext(context, payload.settings);
 });
 

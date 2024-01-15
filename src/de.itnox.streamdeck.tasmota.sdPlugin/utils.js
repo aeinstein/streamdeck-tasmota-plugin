@@ -118,6 +118,13 @@ class Device {
             this.doRequest({payload, callback});
 
         } else {
+            for(let i=0; i < this.queue.length; i++){
+                let p = this.queue[i];
+                if(p.payload === payload) {
+                    return;
+                }
+            }
+
             this.queue.push({payload, callback});
             this.tick();
         }
