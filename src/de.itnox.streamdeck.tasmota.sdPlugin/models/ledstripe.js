@@ -70,7 +70,7 @@ ledaction.onDialUp(({action, context, device, event, payload})=>{
 });
 
 ledaction.onDialRotate(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     switch(viewStates[context]){
         case 0:
@@ -120,7 +120,7 @@ ledaction.onDialRotate(({ action, context, device, event, payload }) => {
 
 function fireHold({action, context, device, event, payload}){
     console.log("fireHold");
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     if(t_device.POWER) setPower(context, payload.settings, 0, updateValue);
     else setPower(context, payload.settings, 1, updateValue);
@@ -146,7 +146,7 @@ function firePress({action, context, device, event, payload}){
 
             let val = 0;
 
-            const t_device = cache.getOrAddDevice(context, payload.settings.url);
+            const t_device = cache.getOrAddDevice(context, payload.settings);
 
             val = t_device.HSBColor[viewStates[context]];
 
@@ -167,7 +167,7 @@ function firePress({action, context, device, event, payload}){
 
 
 colorAction.onDialRotate(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     t_device.HSBColor[0] += payload.ticks;
 
@@ -178,7 +178,7 @@ colorAction.onDialRotate(({ action, context, device, event, payload }) => {
 });
 
 colorAction.onDialUp(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     if(t_device.HSBColor[0] > 0) t_device.HSBColor[0] = 0;
     else t_device.HSBColor[0] = 180;
@@ -193,13 +193,13 @@ colorAction.onWillAppear(({action, context, device, event, payload})=>{
 
 colorAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
-    cache.removeContext(context, payload.settings.url);
+    cache.removeContext(context, payload.settings);
 });
 
 
 
 brightnessAction.onDialRotate(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     t_device.HSBColor[2] += payload.ticks;
 
@@ -210,7 +210,7 @@ brightnessAction.onDialRotate(({ action, context, device, event, payload }) => {
 });
 
 brightnessAction.onDialUp(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(payload.settings.url);
+    const t_device = cache.getOrAddDevice(payload.settings);
 
     if(t_device.HSBColor[2] > 0) t_device.HSBColor[2] = 0;
     else t_device.HSBColor[2] = 100;
@@ -225,12 +225,12 @@ brightnessAction.onWillAppear(({action, context, device, event, payload})=>{
 
 brightnessAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
-    cache.removeContext(context, payload.settings.url);
+    cache.removeContext(context, payload.settings);
 });
 
 
 saturationAction.onDialRotate(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(context, payload.settings.url);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     t_device.HSBColor[1] += payload.ticks;
 
@@ -241,7 +241,7 @@ saturationAction.onDialRotate(({ action, context, device, event, payload }) => {
 });
 
 saturationAction.onDialUp(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(payload.settings.url);
+    const t_device = cache.getOrAddDevice(payload.settings);
 
     if(t_device.HSBColor[1] > 0) t_device.HSBColor[1] = 0;
     else t_device.HSBColor[1] = 100;
@@ -256,5 +256,5 @@ saturationAction.onWillAppear(({action, context, device, event, payload})=>{
 
 saturationAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
-    cache.removeContext(context, payload.settings.url);
+    cache.removeContext(context, payload.settings);
 });
