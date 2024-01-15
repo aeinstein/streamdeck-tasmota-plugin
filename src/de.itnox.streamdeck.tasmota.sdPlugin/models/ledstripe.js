@@ -47,8 +47,22 @@ ledaction.onWillAppear(({action, context, device, event, payload})=>{
     //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
     else $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
+
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+
+    if(payload.settings.autoRefresh >= 0) {
+        t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
+            getHSBColor(context, payload.settings, updateValue);
+        });
+    }
+
     getHSBColor(context, payload.settings, updateValue);
 })
+
+ledaction.onWillDisappear(({action, context, device, event, payload}) =>{
+    console.log( action, context, device, event, payload);
+    cache.removeContext(context, payload.settings);
+});
 
 ledaction.onDialDown(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);

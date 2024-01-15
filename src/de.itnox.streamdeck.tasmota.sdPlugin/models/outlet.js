@@ -21,7 +21,8 @@ toggleAction.onWillAppear(({action, context, device, event, payload})=>{
             getStatus(context, payload.settings, updateValue);
         });
     } else {
-        getPower(context, payload.settings, updateValue);
+        //getPower(context, payload.settings, updateValue);
+        getStatus(context, payload.settings, updateValue);
     }
 });
 
