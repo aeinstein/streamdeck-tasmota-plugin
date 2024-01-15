@@ -88,6 +88,68 @@ getHSBColor = (context, settings, callback) =>{
     t_device.send(payload, callback);
 }
 
+getWhite = (context, settings, callback) =>{
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings);
+    let payload = "/cm?cmnd=White";
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback);
+}
+
+getCT = (context, settings, callback) =>{
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings);
+    let payload = "/cm?cmnd=CT";
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback);
+}
+
+setWhite = (context, settings, white, callback, noQueue)=>{
+    console.log("White: " + white);
+
+    $SD.setFeedback(context, {
+        "value": white,
+        "indicator": white
+    });
+
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings);
+    let payload = "/cm?cmnd=White%20" + white;
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback, noQueue);
+}
+
+setCT = (context, settings, white, callback, noQueue)=>{
+    console.log("White: " + white);
+
+    $SD.setFeedback(context, {
+        "value": white,
+        "indicator": white
+    });
+
+    if(settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice(context, settings);
+    let payload = "/cm?cmnd=CT%20" + white;
+    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
+    t_device.send(payload, callback, noQueue);
+}
+
 getPower = (context, settings, callback) =>{
     if(settings.url === "") {
         $SD.showAlert(context);
@@ -185,7 +247,8 @@ updateValue = (t_device, success, result)=>{
 
     //t_device.POWER = result.POWER !== "OFF";
     t_device.Dimmer = result.Dimmer;
-    //t_device.Color = result.Color;
+    t_device.White = result.White;
+    t_device.CT = result.CT;
 
     // WHY is HSBColor not an array ;!?!?! grrr
     let hsb = result.HSBColor;
@@ -193,6 +256,8 @@ updateValue = (t_device, success, result)=>{
     t_device.HSBColor[0] = Number(ff[0]);
     t_device.HSBColor[1] = Number(ff[1]);
     t_device.HSBColor[2] = Number(ff[2]);
+
+
 
     t_device.forEachContext((context)=>{
         console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]]);

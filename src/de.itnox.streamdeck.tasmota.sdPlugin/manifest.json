@@ -130,6 +130,27 @@
 			"Tooltip": "This is an example tooltip",
 			"UUID": "de.itnox.streamdeck.tasmota.rgbdevice",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
+		},
+		{
+			"Name": "White Control",
+			"Icon": "actions/assets/brightness",
+			"Controllers": ["Encoder"],
+			"Encoder": {
+				"layout": "layouts/saturation.json",
+				"TriggerDescription": {
+					"Rotate": "Parameter",
+					"Push": "Switch Parameter",
+					"LongTouch": "On/Off"
+				}
+			},
+			"States": [
+				{
+					"Image": "actions/assets/color"
+				}
+			],
+			"Tooltip": "This is an example tooltip",
+			"UUID": "de.itnox.streamdeck.tasmota.wwdevice",
+			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		}
 	]
 }

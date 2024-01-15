@@ -14,9 +14,9 @@
     "Name": "Helligkeit",
     "Tooltip": "Hellgkeitsregler"
   },
-  "de.itnox.streamdeck.tasmota.temperature": {
-    "Name": "Temperatur",
-    "Tooltip": "Temperaturregler"
+  "de.itnox.streamdeck.tasmota.saturation": {
+    "Name": "Sättigung",
+    "Tooltip": "Farbsättigung"
   },
 
   "de.itnox.streamdeck.tasmota.fixed": {

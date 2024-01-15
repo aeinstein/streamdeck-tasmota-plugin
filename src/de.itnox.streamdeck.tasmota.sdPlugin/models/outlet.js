@@ -16,13 +16,12 @@ toggleAction.onKeyUp(({action, context, device, event, payload})=>{
 toggleAction.onWillAppear(({action, context, device, event, payload})=>{
     const t_device = cache.getOrAddDevice(context, payload.settings);
 
+    getStatus(context, payload.settings, updateValue);
+
     if(payload.settings.autoRefresh >= 0) {
         t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
             getStatus(context, payload.settings, updateValue);
         });
-    } else {
-        //getPower(context, payload.settings, updateValue);
-        getStatus(context, payload.settings, updateValue);
     }
 });
 

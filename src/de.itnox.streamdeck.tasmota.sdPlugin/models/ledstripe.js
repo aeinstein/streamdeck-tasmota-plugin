@@ -4,7 +4,8 @@
 const colorAction = new Action('de.itnox.streamdeck.tasmota.color');
 const brightnessAction = new Action('de.itnox.streamdeck.tasmota.brightness');
 const saturationAction = new Action('de.itnox.streamdeck.tasmota.saturation');
-const ledaction= new Action('de.itnox.streamdeck.tasmota.rgbdevice');
+const rgbaction= new Action('de.itnox.streamdeck.tasmota.rgbdevice');
+const wwaction= new Action('de.itnox.streamdeck.tasmota.wwdevice');
 const fixedAction= new Action('de.itnox.streamdeck.tasmota.fixed');
 
 let downTimer = -1;
@@ -14,6 +15,11 @@ const viewStates = [];
 const layouts = [
     "layouts/rgb.json",
     "layouts/saturation.json",
+    "layouts/brightness.json"
+];
+
+const layoutsww = [
+    "layouts/colortemp.json",
     "layouts/brightness.json"
 ]
 
@@ -42,8 +48,76 @@ fixedAction.onDialDown(({action, context, device, event, payload})=>{
 
 
 
+wwaction.onWillAppear(({action, context, device, event, payload})=>{
+    //switch(viewStates[context])
+    if(viewStates[context] === undefined) viewStates[context] = 0;
+    else $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
 
-ledaction.onWillAppear(({action, context, device, event, payload})=>{
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+
+    if(payload.settings.autoRefresh >= 0) {
+        t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
+            getWhite(context, payload.settings, updateValue);
+        });
+    }
+
+    getWhite(context, payload.settings, updateValue);
+})
+
+wwaction.onWillDisappear(({action, context, device, event, payload}) =>{
+    console.log( action, context, device, event, payload);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+    t_device.setAutoRefresh(0);
+    cache.removeContext(context, payload.settings);
+});
+
+wwaction.onDialDown(({action, context, device, event, payload})=>{
+    console.log( action, context, device, event, payload);
+
+    downTimer = setTimeout(()=>{
+        fireHold({action, context, device, event, payload});
+        downTimer = -1;
+    }, 1000);
+});
+
+wwaction.onDialUp(({action, context, device, event, payload})=>{
+    console.log( action, context, device, event, payload);
+
+    if(downTimer >= 0) {
+        clearInterval(downTimer);
+        downTimer = -1;
+        firePress({action, context, device, event, payload});
+    }
+});
+
+wwaction.onDialRotate(({ action, context, device, event, payload }) => {
+    const t_device = cache.getOrAddDevice(context, payload.settings);
+
+    switch(viewStates[context]){
+        case 0:
+            t_device.CT += payload.ticks;
+
+            if(t_device.CT > 500) t_device.CT = 157;
+            if(t_device.CT < 153) t_device.CT = 153;
+
+            setCT(context, payload.settings, t_device.CT, updateValue);
+            break;
+
+        case 1:
+            t_device.White += payload.ticks;
+
+            if(t_device.White > 100) t_device.White = 100;
+            if(t_device.White < 0) t_device.White = 0;
+
+            setWhite(context, payload.settings, t_device.White, updateValue);
+            break;
+    }
+});
+
+
+
+
+rgbaction.onWillAppear(({action, context, device, event, payload})=>{
     //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
     else $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
@@ -59,14 +133,14 @@ ledaction.onWillAppear(({action, context, device, event, payload})=>{
     getHSBColor(context, payload.settings, updateValue);
 })
 
-ledaction.onWillDisappear(({action, context, device, event, payload}) =>{
+rgbaction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
     const t_device = cache.getOrAddDevice(context, payload.settings);
     t_device.setAutoRefresh(0);
     cache.removeContext(context, payload.settings);
 });
 
-ledaction.onDialDown(({action, context, device, event, payload})=>{
+rgbaction.onDialDown(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
     downTimer = setTimeout(()=>{
@@ -75,7 +149,7 @@ ledaction.onDialDown(({action, context, device, event, payload})=>{
     }, 1000);
 });
 
-ledaction.onDialUp(({action, context, device, event, payload})=>{
+rgbaction.onDialUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
     if(downTimer >= 0) {
@@ -85,7 +159,7 @@ ledaction.onDialUp(({action, context, device, event, payload})=>{
     }
 });
 
-ledaction.onDialRotate(({ action, context, device, event, payload }) => {
+rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
     const t_device = cache.getOrAddDevice(context, payload.settings);
 
     switch(viewStates[context]){
@@ -147,8 +221,6 @@ function firePress({action, context, device, event, payload}){
 
     switch(action){
         case "de.itnox.streamdeck.tasmota.fixed":
-
-
             break;
 
         case "de.itnox.streamdeck.tasmota.rgbdevice":
@@ -171,6 +243,35 @@ function firePress({action, context, device, event, payload}){
                 "indicator": val
             });
 
+            break;
+
+        case "de.itnox.streamdeck.tasmota.wwdevice":
+            if(isNaN(viewStates[context])) viewStates[context] = 0;
+
+            viewStates[context]++;
+
+            if(viewStates[context] >= layoutsww.length) viewStates[context] = 0;
+
+            $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
+
+            let val2 = 0;
+
+            const t_device2 = cache.getOrAddDevice(context, payload.settings);
+
+            switch (viewStates[context]){
+                case 0:
+                    val2 = t_device2.CT;
+                    break;
+
+                case 1:
+                    val2 = t_device2.White;
+                    break;
+            }
+
+            $SD.setFeedback(context, {
+                "value": val2,
+                "indicator": val2
+            });
             break;
 
         default:
@@ -226,7 +327,7 @@ brightnessAction.onDialRotate(({ action, context, device, event, payload }) => {
 });
 
 brightnessAction.onDialUp(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(payload.settings);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     if(t_device.HSBColor[2] > 0) t_device.HSBColor[2] = 0;
     else t_device.HSBColor[2] = 100;
@@ -257,7 +358,7 @@ saturationAction.onDialRotate(({ action, context, device, event, payload }) => {
 });
 
 saturationAction.onDialUp(({ action, context, device, event, payload }) => {
-    const t_device = cache.getOrAddDevice(payload.settings);
+    const t_device = cache.getOrAddDevice(context, payload.settings);
 
     if(t_device.HSBColor[1] > 0) t_device.HSBColor[1] = 0;
     else t_device.HSBColor[1] = 100;
