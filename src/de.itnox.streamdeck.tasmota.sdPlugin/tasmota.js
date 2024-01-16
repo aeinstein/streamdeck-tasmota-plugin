@@ -118,7 +118,15 @@ updateValue = (t_device, success, result, senderAction)=>{
         return;
     }
 
-    if(result.POWER === "OFF") t_device.POWER = 0;
+    if(result.POWER === "OFF") {
+        t_device.POWER = 0;
+
+        t_device.forEachContext((context)=>{
+            $SD.setState(context, 0);
+            $SD.setTitle(context, "OFF");
+        });
+    }
+
     if(result.POWER === "ON") t_device.POWER = 1;
 
     // Nur wenn Result Powerstatus hat
@@ -148,12 +156,6 @@ updateValue = (t_device, success, result, senderAction)=>{
                     $SD.setTitle(context, "ON");
                     break;
                 }
-            });
-
-        } else {
-            t_device.forEachContext((context)=>{
-                $SD.setState(context, 0);
-                $SD.setTitle(context, "OFF");
             });
         }
     }
