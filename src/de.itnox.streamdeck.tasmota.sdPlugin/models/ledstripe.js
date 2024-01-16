@@ -43,9 +43,9 @@ fixedAction.onDialDown(({action, context, device, event, payload})=>{
 
 
 wwaction.onWillAppear(({action, context, device, event, payload})=>{
-    //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
-    else $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
+
+    $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
 
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 

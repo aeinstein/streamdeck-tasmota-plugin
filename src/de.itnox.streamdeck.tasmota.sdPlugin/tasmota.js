@@ -142,7 +142,7 @@ updateValue = (t_device, success, result, senderAction)=>{
             t_device.forEachContext((context)=>{
                 $SD.setState(context, 1);
 
-                switch(t_device.settings.titleMode){
+                switch(t_device.settings[context].titleMode){
                 case "1":
                     $SD.setTitle(context, result.StatusSNS.ENERGY.Power + " W");
                     //else $SD.setTitle(context, "0 W");

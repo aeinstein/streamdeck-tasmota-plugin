@@ -68,6 +68,7 @@ class Cache {
                 if(!this.devices[i].contexts.includes(context)) {
                     this.devices[i].contexts.push(context);
                     this.devices[i].actions[context] = action;
+                    this.devices[i].settings[context] = payload.settings;
                 }
 
                 return this.devices[i];
@@ -115,8 +116,8 @@ class Device {
     constructor({action, context, device, event, payload}){
         this.contexts = [context];
         this.actions[context] = action;
-        this.settings = payload.settings;
-        this.url = this.settings.url;
+        this.settings[context] = payload.settings;
+        this.url = this.settings[context].url;
     }
 
     send({action, context, device, event, payload, querystring}, callback, noQueue = false) {
