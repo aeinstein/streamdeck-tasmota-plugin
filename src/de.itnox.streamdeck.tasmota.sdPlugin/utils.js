@@ -58,31 +58,34 @@ removeItemOnce = (arr, value) => {
 class Cache {
     devices = [];
 
-    getOrAddDevice(context, settings) {
-        if(settings.url === undefined) return;
+    getOrAddDevice({action, context, device, event, payload}) {
+        if(payload.settings.url === undefined) return;
 
         for(let i = 0; i < this.devices.length; i++){
-            if(this.devices[i].url === settings.url){
+            if(this.devices[i].url === payload.settings.url){
 
                 // check ob gleicher context
-                if(!this.devices[i].contexts.includes(context)) this.devices[i].contexts.push(context);
+                if(!this.devices[i].contexts.includes(context)) {
+                    this.devices[i].contexts.push(context);
+                    this.devices[i].actions[context] = action;
+                }
 
                 return this.devices[i];
             }
         }
 
         // Wenn Device nicht existiert, anlegen
-        let tmp = new Device(context, settings);
+        let tmp = new Device({action, context, device, event, payload});
 
         this.devices.push(tmp);
         return tmp;
     }
 
-    removeContext(context, settings){
-        if(settings.url === undefined) return;
+    removeContext({action, context, device, event, payload}){
+        if(payload.settings.url === undefined) return;
 
         for(let i = 0; i < this.devices.length; i++) {
-            if (this.devices[i].url === settings.url) {
+            if (this.devices[i].url === payload.settings.url) {
                 this.devices[i].contexts = removeItemOnce(this.devices[i].contexts, context);
                 if(this.devices[i].contexts.length === 0) {
                     this.devices = removeItemOnce(this.devices, this.devices[i]);
@@ -105,18 +108,20 @@ class Device {
     CT = 0;
     HSBColor = [0,0,0];
     contexts = [];
+    actions = [];
     settings = {};
     type = "";
 
-    constructor(context, settings){
-        this.contexts = [ context ];
-        this.settings = settings;
-        this.url = settings.url;
+    constructor({action, context, device, event, payload}){
+        this.contexts = [context];
+        this.actions[context] = action;
+        this.settings = payload.settings;
+        this.url = this.settings.url;
     }
 
-    send(senderAction, payload, callback, noQueue) {
+    send({action, context, device, event, payload, querystring}, callback, noQueue = false) {
         if(noQueue) {
-            this.doRequest({payload, callback, senderAction});
+            this.doRequest({action, context, device, event, querystring, callback});
 
         } else {
             for(let i=0; i < this.queue.length; i++){
@@ -126,7 +131,7 @@ class Device {
                 }
             }
 
-            this.queue.push({payload, callback, senderAction});
+            this.queue.push({action, context, device, event, querystring, callback});
             this.tick();
         }
     }
@@ -150,25 +155,25 @@ class Device {
         xhr.timeout = 2000;
 
         xhr.onerror = () => {
-            tmp.callback(this, false, 'Unable to connect to the bridge.');
+            tmp.callback(this, false, 'Unable to connect to the bridge.', tmp.action);
         };
 
         xhr.ontimeout = () => {
-            tmp.callback(this, false, 'Connection to the bridge timed out.');
+            tmp.callback(this, false, 'Connection to the bridge timed out.', tmp.action);
         };
 
         xhr.onload = () => {
-            if (xhr.readyState !== XMLHttpRequest.DONE || xhr.status !== 200) tmp.callback(this, false, 'Could not connect to tasmota device.');
-            if (xhr.response === undefined || xhr.response == null) tmp.callback(this, false, 'Bridge response is undefined or null.');
+            if (xhr.readyState !== XMLHttpRequest.DONE || xhr.status !== 200) tmp.callback(this, false, 'Could not connect to tasmota device.', tmp.action);
+            if (xhr.response === undefined || xhr.response == null) tmp.callback(this, false, 'Bridge response is undefined or null.', tmp.action);
 
             let result = xhr.response;
 
             console.log("result: ",xhr.response);
 
-            tmp.callback(this, true, result, tmp.senderAction);
+            tmp.callback(this, true, result, tmp.action);
         };
 
-        xhr.open('GET', this.url + tmp.payload, true);
+        xhr.open('GET', this.url + tmp.querystring, true);
         xhr.send();
     }
 

@@ -1,4 +1,4 @@
-setColor = (action, context, settings, color, callback, noQueue)=>{
+setColor = ({action, context, device, event, payload}, color, callback, noQueue = false)=>{
     console.log("setColor: " + color);
 
     color = color.replace("#", "");
@@ -8,37 +8,44 @@ setColor = (action, context, settings, color, callback, noQueue)=>{
         "indicator": color
     });
 
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=Color%20" + color
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback, noQueue);
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=Color%20" + color);
 }
 
-setHSBColor = (action, context, settings, pos, callback)=>{
-    console.log("setHSBColor: " + pos);
+setHUE = ({action, context, device, event, payload}, hue, callback, noQueue = false)=>{
+    console.log("setHUE: " + hue);
 
     $SD.setFeedback(context, {
-        "value": pos,
-        "indicator": pos
+        "value": hue,
+        "indicator": hue
     });
 
-    if(settings.url === "") {
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=HSBColor1%20" + hue);
+}
+
+setHSBColor = ({action, context, device, event, payload}, hsb, callback, noQueue = false)=>{
+    console.log("setHSB: " + hsb);
+
+    if(payload.settings.url === "") {
         $SD.showAlert(context);
         return;
     }
 
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=HSBColor1%20" + pos;
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback);
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+    t_device.HSBColor = hsb;
+
+    switch(action){
+        case "de.itnox.streamdeck.tasmota.rgbdevice":
+            $SD.setFeedback(context, {
+                "value": hsb[viewStates[context]],
+                "indicator": hsb[viewStates[context]]
+            });
+            break;
+    }
+
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=HSBColor%20" + t_device.HSBColor[0] + "," + t_device.HSBColor[1] + "," + t_device.HSBColor[2]);
 }
 
-setBrightness = (action, context, settings, brightness, callback, noQueue)=>{
+setBrightness = ({action, context, device, event, payload}, brightness, callback, noQueue = false)=>{
     console.log("Brightness: " + brightness);
 
     $SD.setFeedback(context, {
@@ -46,18 +53,10 @@ setBrightness = (action, context, settings, brightness, callback, noQueue)=>{
         "indicator": brightness
     });
 
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=HSBColor3%20" + brightness;
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback, noQueue);
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=HSBColor3%20" + brightness);
 }
 
-setSaturation = (action, context, settings, pos, callback, noQueue)=>{
+setSaturation = ({action, context, device, event, payload}, pos, callback, noQueue = false)=>{
     console.log("saturation: " + pos);
 
     $SD.setFeedback(context, {
@@ -65,30 +64,14 @@ setSaturation = (action, context, settings, pos, callback, noQueue)=>{
         "indicator": pos
     });
 
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=HSBColor2%20" + pos;
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback, noQueue);
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=HSBColor2%20" + pos);
 }
 
-getHSBColor = (action, context, settings, callback) =>{
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=HSBColor";
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback);
+getHSBColor = ({action, context, device, event, payload}, callback, noQueue = false) =>{
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=HSBColor");
 }
 
-setWhite = (action, context, settings, white, callback, noQueue)=>{
+setWhite = ({action, context, device, event, payload}, white, callback, noQueue = false)=>{
     console.log("White: " + white);
 
     $SD.setFeedback(context, {
@@ -96,18 +79,10 @@ setWhite = (action, context, settings, white, callback, noQueue)=>{
         "indicator": white
     });
 
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=White%20" + white;
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback, noQueue);
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=White%20" + white);
 }
 
-setCT = (action, context, settings, white, callback, noQueue)=>{
+setCT = ({action, context, device, event, payload}, white, callback, noQueue = false)=>{
     console.log("White: " + white);
 
     $SD.setFeedback(context, {
@@ -115,53 +90,22 @@ setCT = (action, context, settings, white, callback, noQueue)=>{
         "indicator": white
     });
 
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=CT%20" + white;
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback, noQueue);
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=CT%20" + white);
 }
 
-getPower = (action, context, settings, callback) =>{
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=Power";
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback);
+getPower = ({action, context, device, event, payload}, callback, noQueue = false) =>{
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=Power");
 }
 
-getStatus = (action, context, settings, callback) =>{
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    let payload = "/cm?cmnd=Status%208";
-    if(settings.password !== "") payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback);
+getStatus = ({action, context, device, event, payload}, callback, noQueue = false) =>{
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=Status%208");
 }
 
-setPower = (action, context, settings, power, callback) => {
-    if(settings.url === "") {
-        $SD.showAlert(context);
-        return;
-    }
+setPower = ({action, context, device, event, payload}, power, callback, noQueue = false) => {
+    let querystring = "/cm?cmnd=Power%20Off";
+    if(power) querystring = "/cm?cmnd=Power%20On";
 
-    let payload = "/cm?cmnd=Power%20Off";
-    if(power) payload = "/cm?cmnd=Power%20On";
-
-    const t_device = cache.getOrAddDevice(context, settings);
-    if(settings.password) payload += "&user=admin&password=" + settings.password;
-    t_device.send(action, payload, callback);
+    _send({action, context, device, event, payload, callback, noQueue}, querystring);
 }
 
 updateValue = (t_device, success, result, senderAction)=>{
@@ -174,49 +118,44 @@ updateValue = (t_device, success, result, senderAction)=>{
         return;
     }
 
-    if(result.POWER === "OFF") {
-        t_device.forEachContext((context)=>{
-            $SD.setState(context, 0);
-            $SD.setTitle(context, "OFF");
-        });
+    if(result.POWER === "OFF") t_device.POWER = 0;
+    if(result.POWER === "ON") t_device.POWER = 1;
 
-        t_device.POWER = 0;
-
-    } else {
-        if(t_device.settings.autoRefresh >= 0 )  {
+    // Nur wenn Result Powerstatus hat
+    if(result.StatusSNS){
+        if(t_device.POWER) {
             t_device.forEachContext((context)=>{
                 $SD.setState(context, 1);
 
                 switch(t_device.settings.titleMode){
-                    case "0":
-                        $SD.setTitle(context, "ON");
-                        break;
+                case "1":
+                    $SD.setTitle(context, result.StatusSNS.ENERGY.Power + " W");
+                    //else $SD.setTitle(context, "0 W");
+                    break;
 
-                    case "1":
-                        if(result.StatusSNS.ENERGY.Power) $SD.setTitle(context, result.StatusSNS.ENERGY.Power + " W");
-                        else $SD.setTitle(context, "0 W");
-                        break;
+                case "2":
+                    $SD.setTitle(context, result.StatusSNS.ENERGY.Today + " Wh");
+                    //else $SD.setTitle(context, "0 Wh");
+                    break;
 
-                    case "2":
-                        if(result.StatusSNS.ENERGY.Today) $SD.setTitle(context, result.StatusSNS.ENERGY.Today + " Wh");
-                        else $SD.setTitle(context, "0 Wh");
-                        break;
+                case "3":
+                    $SD.setTitle(context, result.StatusSNS.ENERGY.Total + " Wh");
+                    //else $SD.setTitle(context, "0 Wh");
+                    break;
 
-                    case "3":
-                        if(result.StatusSNS.ENERGY.Total) $SD.setTitle(context, result.StatusSNS.ENERGY.Total + " Wh");
-                        else $SD.setTitle(context, "0 Wh");
-                        break;
+                default:
+                    console.log("std titelmode");
+                    $SD.setTitle(context, "ON");
+                    break;
                 }
             });
 
         } else {
             t_device.forEachContext((context)=>{
-                $SD.setState(context, 1);
-                $SD.setTitle(context, "ON");
+                $SD.setState(context, 0);
+                $SD.setTitle(context, "OFF");
             });
         }
-
-        t_device.POWER = 1;
     }
 
     if(!result.HSBColor) return;    // No RGB
@@ -234,17 +173,13 @@ updateValue = (t_device, success, result, senderAction)=>{
     t_device.HSBColor[2] = Number(ff[2]);
 
 
-
+    // Alle, zu diesem Result, passenden Steuerelemente updaten
     t_device.forEachContext((context)=>{
-        console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]]);
+        let action = t_device.actions[context];
 
-        if(viewStates[context] === undefined) {
-            // Regler kein Multi
-
-        } else {
-            switch(senderAction){
-                case "de.itnox.streamdeck.tasmota.wwdevice":
-                    switch(viewStates[context]){
+        switch(action){
+            case "de.itnox.streamdeck.tasmota.wwdevice":
+                switch(viewStates[context]){
                     case 0:
                         $SD.setFeedback(context, {
                             "value": t_device.CT,
@@ -258,19 +193,31 @@ updateValue = (t_device, success, result, senderAction)=>{
                             "indicator": t_device.White
                         });
                         break;
-                    }
-                    break;
+                }
+                break;
 
-                default:
-                    $SD.setFeedback(context, {
-                        "value": t_device.HSBColor[viewStates[context]],
-                        "indicator": t_device.HSBColor[viewStates[context]]
-                    });
-                    break;
-            }
-
+            case "de.itnox.streamdeck.tasmota.rgbdevice":
+            case "de.itnox.streamdeck.tasmota.brightness":
+            case "de.itnox.streamdeck.tasmota.color":
+                console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]]);
+                $SD.setFeedback(context, {
+                    "value": t_device.HSBColor[viewStates[context]],
+                    "indicator": t_device.HSBColor[viewStates[context]]
+                });
+                break;
         }
     });
+}
+
+_send = ({action, context, device, event, payload, callback, noQueue}, querystring)=>{
+    if(payload.settings.url === "") {
+        $SD.showAlert(context);
+        return;
+    }
+
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+    if(payload.settings.password !== "") querystring += "&user=admin&password=" + payload.settings.password;
+    t_device.send({action, context, device, event, payload, querystring}, callback, noQueue);
 }
 
 const cache = new Cache();

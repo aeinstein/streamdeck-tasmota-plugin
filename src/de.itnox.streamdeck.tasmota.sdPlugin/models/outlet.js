@@ -1,33 +1,33 @@
 /// <reference path="libs/js/action.js" />
 /// <reference path="libs/js/stream-deck.js" />
 
-const toggleAction = new Action('de.itnox.streamdeck.tasmota.toggle');
+const powerAction = new Action('de.itnox.streamdeck.tasmota.toggle');
 
-toggleAction.onKeyUp(({action, context, device, event, payload})=>{
+powerAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    const t_device = cache.getOrAddDevice(context, payload.settings);
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 
     t_device.POWER = !t_device.POWER;
 
-    setPower(action, context, payload.settings, t_device.POWER, updateValue);
+    setPower({action, context, device, event, payload}, t_device.POWER, updateValue, true);
 });
 
-toggleAction.onWillAppear(({action, context, device, event, payload})=>{
-    const t_device = cache.getOrAddDevice(context, payload.settings);
+powerAction.onWillAppear(({action, context, device, event, payload})=>{
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 
-    getStatus(action, context, payload.settings, updateValue);
+    getPower({action, context, device, event, payload}, updateValue);
 
     if(payload.settings.autoRefresh >= 0) {
         t_device.setAutoRefresh(payload.settings.autoRefresh, ()=>{
-            getStatus(action, context, payload.settings, updateValue);
+            getStatus({action, context, device, event, payload}, updateValue);
         });
     }
 });
 
-toggleAction.onWillDisappear(({action, context, device, event, payload}) =>{
+powerAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
-    const t_device = cache.getOrAddDevice(context, payload.settings);
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
     t_device.setAutoRefresh(0);
-    cache.removeContext(context, payload.settings);
+    cache.removeContext({action, context, device, event, payload});
 });
