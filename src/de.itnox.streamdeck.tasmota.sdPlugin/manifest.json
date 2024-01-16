@@ -48,6 +48,18 @@
 		},
 
 		{
+			"Icon": "actions/assets/power",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/assets/color@2x"
+				}
+			],
+			"UUID": "de.itnox.streamdeck.tasmota.wwfixed",
+			"PropertyInspectorPath": "actions/pi/wwfixed.html"
+		},
+
+		{
 			"Name": "Color",
 			"Icon": "actions/assets/color",
 			"Controllers": ["Encoder"],
@@ -132,7 +144,7 @@
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		},
 		{
-			"Name": "White Control",
+			"Name": "CW Control",
 			"Icon": "actions/assets/brightness",
 			"Controllers": ["Encoder"],
 			"Encoder": {

@@ -5,7 +5,6 @@
     "Name": "Steckdose",
     "Tooltip": "An/Aus schalten von Tasmota Steckdosen"
   },
-
   "de.itnox.streamdeck.tasmota.color": {
     "Name": "Farbe",
     "Tooltip": "Farbregler"
@@ -18,19 +17,27 @@
     "Name": "Sättigung",
     "Tooltip": "Farbsättigung"
   },
-
   "de.itnox.streamdeck.tasmota.fixed": {
     "Name": "Fester RGB Wert",
-    "Tooltip": ""
+    "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
   },
 
+  "de.itnox.streamdeck.tasmota.wwfixed": {
+    "Name": "Fester CCW Wert",
+    "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
+  },
+  "de.itnox.streamdeck.tasmota.rgbdevice": {
+    "Name": "HSB Regler",
+    "Tooltip": "Regler für Hue,Saturation und Brightness"
+  },
+  "de.itnox.streamdeck.tasmota.wwdevice": {
+    "Name": "CWW Regler",
+    "Tooltip": "Regler für Kalt/Warm Weiss"
+  },
   "Localization": {
-    "More info": "Mehr Infos",
-    "Message": "Nachricht",
-    "Click Me": "Klicke mich",
-    "Button": "Taste",
     "URL of the tasmota device": "URL des Tasmota Gerätes",
     "Color": "Farbe",
-    "Brightness": "Helligkeit"
+    "Brightness": "Helligkeit",
+    "Saturation": "Sättigung"
   }
 }

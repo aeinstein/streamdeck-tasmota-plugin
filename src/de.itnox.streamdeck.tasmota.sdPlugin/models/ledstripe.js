@@ -7,6 +7,7 @@ const saturationAction = new Action('de.itnox.streamdeck.tasmota.saturation');
 const rgbaction= new Action('de.itnox.streamdeck.tasmota.rgbdevice');
 const wwaction= new Action('de.itnox.streamdeck.tasmota.wwdevice');
 const fixedAction= new Action('de.itnox.streamdeck.tasmota.fixed');
+const wwfixedAction= new Action('de.itnox.streamdeck.tasmota.wwfixed');
 
 let downTimer = -1;
 
@@ -26,12 +27,41 @@ const layoutsww = [
 fixedAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    setSaturation({action, context, device, event, payload}, 100, updateValue, true);
-    setBrightness({action, context, device, event, payload}, payload.settings.brightness, updateValue, true);
-    setColor({action, context, device, event, payload}, payload.settings.color, updateValue, true);
+
+    if(downTimer >= 0) {
+        clearInterval(downTimer);
+        downTimer = -1;
+        setColor({action, context, device, event, payload}, payload.settings.color, updateValue, true);
+        //setSaturation({action, context, device, event, payload}, 0, updateValue, true);
+        setBrightness({action, context, device, event, payload}, payload.settings.brightness, updateValue, true);
+    }
 });
 
-fixedAction.onDialDown(({action, context, device, event, payload})=>{
+fixedAction.onKeyDown(({action, context, device, event, payload})=>{
+    console.log( action, context, device, event, payload);
+
+    downTimer = setTimeout(()=>{
+        fireHold({action, context, device, event, payload});
+        downTimer = -1;
+    }, 1000);
+});
+
+
+wwfixedAction.onKeyUp(({action, context, device, event, payload})=>{
+    console.log( action, context, device, event, payload);
+
+    if(downTimer >= 0) {
+        clearInterval(downTimer);
+        downTimer = -1;
+        setCT({action, context, device, event, payload}, payload.settings.ct, updateValue, true);
+        setWhite({action, context, device, event, payload}, payload.settings.brightness, updateValue, true);
+    }
+});
+
+
+
+
+wwfixedAction.onKeyDown(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
     downTimer = setTimeout(()=>{
