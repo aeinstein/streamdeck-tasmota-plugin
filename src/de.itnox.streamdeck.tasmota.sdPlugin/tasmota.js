@@ -127,7 +127,14 @@ updateValue = (t_device, success, result, senderAction)=>{
         });
     }
 
-    if(result.POWER === "ON") t_device.POWER = 1;
+    if(result.POWER === "ON") {
+        t_device.POWER = 1;
+
+        t_device.forEachContext((context)=>{
+            $SD.setState(context, 1);
+            $SD.setTitle(context, "ON");
+        });
+    }
 
     // Nur wenn Result Powerstatus hat
     if(result.StatusSNS){
