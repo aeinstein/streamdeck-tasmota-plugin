@@ -37,9 +37,10 @@ optimized for SD+
 
 # Usage
 You can use multiple controls for one device. Recieved parameters updates are dispatched to all controls of the same device.
-* Use Autorefresh only if you control your devices from another point, for example: Tasmota-WebGUI or Homeautomation Software
-* After changes, switch page, for reloading refresh timers 
-* 
+* Use AutoRefresh if you control your devices from another point, for example: Tasmota-WebGUI or Homeautomation Software
+* After changes, switch page, for reloading AutoRefresh timers
+* You only need one AutoRefresh per Device
+
 ![](src/de.itnox.streamdeck.tasmota.sdPlugin/previews/PI.PNG)
 
 ![](src/de.itnox.streamdeck.tasmota.sdPlugin/previews/GUI.PNG)
@@ -49,14 +50,24 @@ You can use multiple controls for one device. Recieved parameters updates are di
 ## Outlet Control
 Functions: 
 * Press: Toggle On/Off
-* TitleModes: State, current power, today energy, total energy
+* TitleModes: Power State, current power, today energy, total energy
 
-## Color/Brightness/Saturation
+## Button for static RGB Value
+Functions:
+* Press: set stored Color
+* Hold: Toggle Power
+
+## Button for static CWW Value
+Functions:
+* Press: set stored CWW
+* Hold: Toggle Power
+
+## Color-/Brightness-/Saturation Control
 Functions:
 * Press: Switch 0/100
 * Hold: Toggle Power
 
-## HSB Control
+## HSB Control Multi Control
 Functions:
 * Press: Switch through parameters
 * Hold: Toggle Power
