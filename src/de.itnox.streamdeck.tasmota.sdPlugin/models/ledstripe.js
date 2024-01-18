@@ -27,13 +27,10 @@ const layoutsww = [
 fixedAction.onKeyUp(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-
     if(downTimer >= 0) {
         clearInterval(downTimer);
         downTimer = -1;
         setColor({action, context, device, event, payload}, payload.settings.color, updateValue, true);
-        //setSaturation({action, context, device, event, payload}, 0, updateValue, true);
-        setBrightness({action, context, device, event, payload}, payload.settings.brightness, updateValue, true);
     }
 });
 
@@ -232,7 +229,7 @@ rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
 
 });
 
-function fireHold({action, context, device, event, payload}){
+fireHold = ({action, context, device, event, payload})=> {
     console.log("fireHold");
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 
@@ -240,7 +237,7 @@ function fireHold({action, context, device, event, payload}){
     else setPower({action, context, device, event, payload}, 1, updateValue);
 }
 
-function firePress({action, context, device, event, payload}){
+firePress = ({action, context, device, event, payload}) => {
     console.log("firePress");
 
     switch(action){
