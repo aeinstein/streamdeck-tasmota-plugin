@@ -17,8 +17,8 @@ optimized for SD+
 - granular control of RGBWW Leds
 - store static values
 - realtime reading on control appearance
-- Same parameters over different controls are sychronized 
-- auto polling of states
+- Same parameters over different controls are synchronized 
+- Auto polling of states
 - Keep viewstate of MultiController when switching pages
 
 
