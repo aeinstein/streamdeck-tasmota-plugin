@@ -33,16 +33,16 @@ optimized for SD+
 * Enter URL and credentials(optionally) of a tasmota device
 * state is automatically read
 
-![](src\de.itnox.streamdeck.tasmota.sdPlugin\previews\setup.PNG)
+![](src/de.itnox.streamdeck.tasmota.sdPlugin/previews/setup.PNG)
 
 # Usage
 You can use multiple controls for one device. Recieved parameters updates are dispatched to all controls of the same device.
 * Use Autorefresh only if you control your devices from another point, for example: Tasmota-WebGUI or Homeautomation Software
 * After changes, switch page, for reloading refresh timers 
 * 
-![](src\de.itnox.streamdeck.tasmota.sdPlugin\previews\PI.PNG)
+![](src/de.itnox.streamdeck.tasmota.sdPlugin/previews/PI.PNG)
 
-![](src\de.itnox.streamdeck.tasmota.sdPlugin\previews\GUI.PNG)
+![](src/de.itnox.streamdeck.tasmota.sdPlugin/previews/GUI.PNG)
 
 
 # The Controls
