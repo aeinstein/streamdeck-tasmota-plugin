@@ -17,13 +17,14 @@
     "Name": "Sättigung",
     "Tooltip": "Farbsättigung"
   },
+
   "de.itnox.streamdeck.tasmota.fixed": {
-    "Name": "Fester RGB Wert",
+    "Name": "Lade festen RGB Wert",
     "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
   },
 
   "de.itnox.streamdeck.tasmota.wwfixed": {
-    "Name": "Fester CCW Wert",
+    "Name": "Lade festen CCW Wert",
     "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
   },
   "de.itnox.streamdeck.tasmota.rgbdevice": {

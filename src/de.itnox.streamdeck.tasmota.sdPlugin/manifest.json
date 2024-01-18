@@ -6,7 +6,7 @@
 	"Name": "Tasmota",
 	"Icon": "actions/assets/tasmota_logo",
 	"URL": "https://github.com/aeinstein/streamdeck-tasmota-plugin",
-	"Version": "0.0.1-prealpha",
+	"Version": "1.0.0-alpha",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},
@@ -28,7 +28,10 @@
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/power@2x"
+					"Image": "actions/assets/power"
+				},
+				{
+					"Image": "actions/assets/power_on"
 				}
 			],
 			"UUID": "de.itnox.streamdeck.tasmota.toggle",
@@ -36,25 +39,27 @@
 		},
 
 		{
-			"Icon": "actions/assets/power",
+			"Icon": "actions/assets/color",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
 					"Image": "actions/assets/color@2x"
 				}
 			],
+			"Tooltip": "Load static RGB Setting",
 			"UUID": "de.itnox.streamdeck.tasmota.fixed",
 			"PropertyInspectorPath": "actions/pi/fixed.html"
 		},
 
 		{
-			"Icon": "actions/assets/power",
+			"Icon": "actions/assets/temperature",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/color@2x"
+					"Image": "actions/assets/temperature"
 				}
 			],
+			"Tooltip": "Load static CWW Setting",
 			"UUID": "de.itnox.streamdeck.tasmota.wwfixed",
 			"PropertyInspectorPath": "actions/pi/wwfixed.html"
 		},
@@ -72,7 +77,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/color@2x"
+					"Image": "actions/assets/color"
 				}
 			],
 			"Tooltip": "This is an example tooltip",
@@ -93,10 +98,10 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/brightness@2x"
+					"Image": "actions/assets/brightness"
 				}
 			],
-			"Tooltip": "This is an example tooltip",
+			"Tooltip": "Control Brightness",
 			"UUID": "de.itnox.streamdeck.tasmota.brightness",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		},
@@ -117,7 +122,7 @@
 					"Image": "actions/assets/temperature"
 				}
 			],
-			"Tooltip": "This is an example tooltip",
+			"Tooltip": "Control Saturation",
 			"UUID": "de.itnox.streamdeck.tasmota.saturation",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		},
@@ -139,12 +144,12 @@
 					"Image": "actions/assets/color"
 				}
 			],
-			"Tooltip": "This is an example tooltip",
+			"Tooltip": "Control Hue, Saturation, Brightness",
 			"UUID": "de.itnox.streamdeck.tasmota.rgbdevice",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		},
 		{
-			"Name": "CW Control",
+			"Name": "CWW Control",
 			"Icon": "actions/assets/brightness",
 			"Controllers": ["Encoder"],
 			"Encoder": {
@@ -160,7 +165,7 @@
 					"Image": "actions/assets/color"
 				}
 			],
-			"Tooltip": "This is an example tooltip",
+			"Tooltip": "Control Cold/Warm White",
 			"UUID": "de.itnox.streamdeck.tasmota.wwdevice",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		}
