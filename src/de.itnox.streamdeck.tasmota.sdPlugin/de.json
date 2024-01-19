@@ -19,12 +19,12 @@
   },
 
   "de.itnox.streamdeck.tasmota.fixed": {
-    "Name": "Lade festen RGB Wert",
+    "Name": "RGB Preset",
     "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
   },
 
   "de.itnox.streamdeck.tasmota.wwfixed": {
-    "Name": "Lade festen CCW Wert",
+    "Name": "CWW Preset",
     "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
   },
   "de.itnox.streamdeck.tasmota.rgbdevice": {

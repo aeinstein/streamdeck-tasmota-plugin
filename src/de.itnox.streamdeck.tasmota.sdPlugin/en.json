@@ -2,7 +2,40 @@
   "Description": "Plugin for controlling tasmota devices",
   "Name": "Tasmota Bindings",
 
+  "de.itnox.streamdeck.tasmota.toggle": {
+    "Name": "Outlet",
+    "Tooltip": "Toggle Tasmota Outlet"
+  },
+  "de.itnox.streamdeck.tasmota.color": {
+    "Name": "Color",
+    "Tooltip": "Farbregler"
+  },
+  "de.itnox.streamdeck.tasmota.brightness": {
+    "Name": "Brightness",
+    "Tooltip": "Brightness Control"
+  },
+  "de.itnox.streamdeck.tasmota.saturation": {
+    "Name": "Saturation",
+    "Tooltip": "Saturation Control"
+  },
 
+  "de.itnox.streamdeck.tasmota.fixed": {
+    "Name": "RGB Preset",
+    "Tooltip": "Load static values for use in Multi Actions as scenes"
+  },
+
+  "de.itnox.streamdeck.tasmota.wwfixed": {
+    "Name": "CWW Preset",
+    "Tooltip": "Load static values for use in Multi Actions as scenes"
+  },
+  "de.itnox.streamdeck.tasmota.rgbdevice": {
+    "Name": "HSB Regler",
+    "Tooltip": "Integrated control for hue, brightness, saturation"
+  },
+  "de.itnox.streamdeck.tasmota.wwdevice": {
+    "Name": "CWW Regler",
+    "Tooltip": "Integrated control for cold/warm white"
+  },
   "Localization": {
 
   }
