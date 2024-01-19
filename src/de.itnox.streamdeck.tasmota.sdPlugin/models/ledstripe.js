@@ -9,21 +9,20 @@ const wwaction= new Action('de.itnox.streamdeck.tasmota.wwdevice');
 const fixedAction= new Action('de.itnox.streamdeck.tasmota.fixed');
 const wwfixedAction= new Action('de.itnox.streamdeck.tasmota.wwfixed');
 
-let downTimer = -1;
-
 const viewStates = [];
 
-const layouts = [
-    "layouts/rgb.json",
-    "layouts/saturation.json",
-    "layouts/brightness.json"
-];
+const layouts = {
+    "HSB": [
+        "layouts/rgb.json",
+        "layouts/saturation.json",
+        "layouts/brightness.json"
+    ],
 
-const layoutsww = [
-    "layouts/colortemp.json",
-    "layouts/brightness.json"
-]
-
+    "CWW": [
+        "layouts/colortemp.json",
+        "layouts/brightness.json"
+    ]
+};
 
 fixedAction.onKeyPressed(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
@@ -60,7 +59,7 @@ wwfixedAction.onKeyLongPressed(({action, context, device, event, payload}) => {
 wwaction.onWillAppear(({action, context, device, event, payload})=>{
     if(viewStates[context] === undefined) viewStates[context] = 0;
 
-    $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
+    $SD.setFeedbackLayout(context, layouts["CWW"][viewStates[context]]);
 
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 
@@ -85,9 +84,9 @@ wwaction.onDialPressed(({action, context, device, event, payload})=> {
 
     viewStates[context]++;
 
-    if(viewStates[context] >= layoutsww.length) viewStates[context] = 0;
+    if(viewStates[context] >= layouts["CWW"].length) viewStates[context] = 0;
 
-    $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
+    $SD.setFeedbackLayout(context, layouts["CWW"][viewStates[context]]);
 
     let val = 0;
 
@@ -147,7 +146,7 @@ wwaction.onDialRotate(({ action, context, device, event, payload }) => {
 rgbaction.onWillAppear(({action, context, device, event, payload})=>{
     //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
-    else $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
+    else $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]]);
 
     const t_device = cache.getOrAddDevice({ action, context, device, event, payload });
 
@@ -174,9 +173,9 @@ rgbaction.onDialPressed(({action, context, device, event, payload})=> {
 
     viewStates[context]++;
 
-    if(viewStates[context] >= layouts.length) viewStates[context] = 0;
+    if(viewStates[context] >= layouts["HSB"].length) viewStates[context] = 0;
 
-    $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
+    $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]]);
 
     let val = 0;
 
