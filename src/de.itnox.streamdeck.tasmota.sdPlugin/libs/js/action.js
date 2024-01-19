@@ -60,7 +60,7 @@ class ELGSDAction {
             console.error('A callback function for the keyDown event is required for onKeyDown.');
         }
 
-        this._registerHoldTimer(fn);
+        this._registerKeyHoldTimer();
 
         this.on(`${this.UUID}.${Events.keyPressed}`, (jsn) => fn(jsn));
         return this;
@@ -76,7 +76,7 @@ class ELGSDAction {
             console.error('A callback function for the keyDown event is required for onKeyDown.');
         }
 
-        this._registerHoldTimer(fn);
+        this._registerKeyHoldTimer();
 
         this.on(`${this.UUID}.${Events.keyLongPressed}`, (jsn) => fn(jsn));
         return this;
@@ -231,6 +231,34 @@ class ELGSDAction {
 		return this;
 	}
 
+    /**
+     * Registers a callback function for the onDialPressed event, which fires when a pressed SD+ dial was released
+     * within 750ms
+     * @param {function} fn
+     */
+    onDialPressed(fn) {
+        if (!fn) {
+            console.error('A callback function for the dialPressed event is required for onDialPressed.');
+        }
+        this._registerDialHoldTimer();
+        this.on(`${this.UUID}.${Events.dialPressed}`, (jsn) => fn(jsn));
+        return this;
+    }
+
+    /**
+     * Registers a callback function for the onDialLongPressed event, which fires when a pressed SD+ dial was hold
+     * for minimum 750ms
+     * @param {function} fn
+     */
+    onDialLongPressed(fn) {
+        if (!fn) {
+            console.error('A callback function for the dialLongPressed event is required for onLongDialPressed.');
+        }
+        this._registerDialHoldTimer();
+        this.on(`${this.UUID}.${Events.dialLongPressed}`, (jsn) => fn(jsn));
+        return this;
+    }
+
 	/**
 	 * Registers a callback function for the touchTap event, which fires when a SD+ touch panel was touched quickly
 	 * @param {function} fn
@@ -245,25 +273,52 @@ class ELGSDAction {
 		return this;
 	}
 
-    _registerHoldTimer(){
+    _registerKeyHoldTimer(){
         if(this._registered) return;
 
-        this.on(`${this.UUID}.${Events.keyDown}`, (jsn) => {
-            if(this.downTimer >= 0) clearInterval(this.downTimer);
+        const sender = this;
 
-            this.downTimer = setTimeout(()=>{
-                this.downTimer = -1;
+        this.on(`${this.UUID}.${Events.keyDown}`, (jsn) => {
+            if(sender.downTimer >= 0) clearTimeout(sender.downTimer);
+
+            sender.downTimer = setTimeout(()=>{
+                sender.downTimer = -1;
                 jsn.event = "keyLongPressed";
                 this.emit(`${this.UUID}.${Events.keyLongPressed}`, jsn);
-            }, 750);
+            }, 500);
         });
 
         this.on(`${this.UUID}.${Events.keyUp}`, (jsn) => {
-            if(this.downTimer >= 0) {
-                clearInterval(this.downTimer);
-                this.downTimer = -1;
+            if(sender.downTimer >= 0) {
+                clearTimeout(sender.downTimer);
+                sender.downTimer = -1;
                 jsn.event = "keyPressed";
                 this.emit(`${this.UUID}.${Events.keyPressed}`, jsn);
+            }
+        });
+    }
+
+    _registerDialHoldTimer(){
+        if(this._registered) return;
+
+        const sender = this;
+
+        this.on(`${this.UUID}.${Events.dialDown}`, (jsn) => {
+            if(sender.downTimer >= 0) clearTimeout(sender.downTimer);
+
+            sender.downTimer = setTimeout(()=>{
+                sender.downTimer = -1;
+                jsn.event = "dialLongPressed";
+                this.emit(`${this.UUID}.${Events.dialLongPressed}`, jsn);
+            }, 500);
+        });
+
+        this.on(`${this.UUID}.${Events.dialUp}`, (jsn) => {
+            if(sender.downTimer >= 0) {
+                clearTimeout(sender.downTimer);
+                sender.downTimer = -1;
+                jsn.event = "dialPressed";
+                this.emit(`${this.UUID}.${Events.dialPressed}`, jsn);
             }
         });
     }

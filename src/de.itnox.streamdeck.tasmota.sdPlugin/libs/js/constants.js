@@ -63,6 +63,8 @@ const Events = {
 	dialPress: 'dialPress',
 	dialDown: 'dialDown',
 	dialUp: 'dialUp',
+    dialPressed: 'dialPressed',
+    dialLongPressed: 'dialLongPressed',
 	touchTap: 'touchTap',
 	setFeedback: 'setFeedback',
 	setFeedbackLayout: 'setFeedbackLayout',
