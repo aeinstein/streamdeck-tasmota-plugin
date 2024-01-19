@@ -24,47 +24,35 @@ const layoutsww = [
     "layouts/brightness.json"
 ]
 
-fixedAction.onKeyUp(({action, context, device, event, payload})=>{
-    console.log( action, context, device, event, payload);
 
-    if(downTimer >= 0) {
-        clearInterval(downTimer);
-        downTimer = -1;
-        setColor({action, context, device, event, payload}, payload.settings.color, updateValue, true);
-    }
+fixedAction.onKeyPressed(({action, context, device, event, payload})=>{
+    console.log( action, context, device, event, payload);
+    setColor({action, context, device, event, payload}, payload.settings.color, updateValue, true);
 });
 
-fixedAction.onKeyDown(({action, context, device, event, payload})=>{
+fixedAction.onKeyLongPressed(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    downTimer = setTimeout(()=>{
-        fireHold({action, context, device, event, payload});
-        downTimer = -1;
-    }, 1000);
-});
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 
-
-wwfixedAction.onKeyUp(({action, context, device, event, payload})=>{
-    console.log( action, context, device, event, payload);
-
-    if(downTimer >= 0) {
-        clearInterval(downTimer);
-        downTimer = -1;
-        setCT({action, context, device, event, payload}, payload.settings.ct, updateValue, true);
-        setWhite({action, context, device, event, payload}, payload.settings.brightness, updateValue, true);
-    }
+    if(t_device.POWER) setPower({action, context, device, event, payload}, 0, updateValue);
+    else setPower({action, context, device, event, payload}, 1, updateValue);
 });
 
 
 
-
-wwfixedAction.onKeyDown(({action, context, device, event, payload})=>{
+wwfixedAction.onKeyPressed(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    downTimer = setTimeout(()=>{
-        fireHold({action, context, device, event, payload});
-        downTimer = -1;
-    }, 1000);
+    setCT({action, context, device, event, payload}, payload.settings.ct, updateValue, true);
+    setWhite({action, context, device, event, payload}, payload.settings.brightness, updateValue, true);
+});
+
+wwfixedAction.onKeyLongPressed(({action, context, device, event, payload}) => {
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+
+    if(t_device.POWER) setPower({action, context, device, event, payload}, 0, updateValue);
+    else setPower({action, context, device, event, payload}, 1, updateValue);
 });
 
 
@@ -92,23 +80,42 @@ wwaction.onWillDisappear(({action, context, device, event, payload}) =>{
     cache.removeContext({action, context, device, event, payload});
 });
 
-wwaction.onDialDown(({action, context, device, event, payload})=>{
-    console.log( action, context, device, event, payload);
+wwaction.onDialPressed(({action, context, device, event, payload})=> {
+    if(isNaN(viewStates[context])) viewStates[context] = 0;
 
-    downTimer = setTimeout(()=>{
-        fireHold({action, context, device, event, payload});
-        downTimer = -1;
-    }, 1000);
+    viewStates[context]++;
+
+    if(viewStates[context] >= layoutsww.length) viewStates[context] = 0;
+
+    $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
+
+    let val = 0;
+
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+
+    switch (viewStates[context]){
+    case 0:
+        val = t_device.CT;
+        break;
+
+    case 1:
+        val = t_device.White;
+        break;
+    }
+
+    $SD.setFeedback(context, {
+        "value": val,
+        "indicator": val
+    });
 });
 
-wwaction.onDialUp(({action, context, device, event, payload})=>{
+wwaction.onDialLongPressed(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    if(downTimer >= 0) {
-        clearInterval(downTimer);
-        downTimer = -1;
-        firePress({action, context, device, event, payload});
-    }
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+
+    if(t_device.POWER) setPower({action, context, device, event, payload}, 0, updateValue);
+    else setPower({action, context, device, event, payload}, 1, updateValue);
 });
 
 wwaction.onDialRotate(({ action, context, device, event, payload }) => {
@@ -137,7 +144,6 @@ wwaction.onDialRotate(({ action, context, device, event, payload }) => {
 
 
 
-
 rgbaction.onWillAppear(({action, context, device, event, payload})=>{
     //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
@@ -161,23 +167,36 @@ rgbaction.onWillDisappear(({action, context, device, event, payload}) =>{
     cache.removeContext({action, context, device, event, payload});
 });
 
-rgbaction.onDialDown(({action, context, device, event, payload})=>{
+rgbaction.onDialPressed(({action, context, device, event, payload})=> {
     console.log( action, context, device, event, payload);
 
-    downTimer = setTimeout(()=>{
-        fireHold({action, context, device, event, payload});
-        downTimer = -1;
-    }, 1000);
+    if(isNaN(viewStates[context])) viewStates[context] = 0;
+
+    viewStates[context]++;
+
+    if(viewStates[context] >= layouts.length) viewStates[context] = 0;
+
+    $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
+
+    let val = 0;
+
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+
+    val = t_device.HSBColor[viewStates[context]];
+
+    $SD.setFeedback(context, {
+        "value": val,
+        "indicator": val
+    });
 });
 
-rgbaction.onDialUp(({action, context, device, event, payload})=>{
+rgbaction.onDialLongPressed(({action, context, device, event, payload})=>{
     console.log( action, context, device, event, payload);
 
-    if(downTimer >= 0) {
-        clearInterval(downTimer);
-        downTimer = -1;
-        firePress({action, context, device, event, payload});
-    }
+    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
+
+    if(t_device.POWER) setPower({action, context, device, event, payload}, 0, updateValue);
+    else setPower({action, context, device, event, payload}, 1, updateValue);
 });
 
 rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
@@ -228,79 +247,6 @@ rgbaction.onDialRotate(({ action, context, device, event, payload }) => {
     }
 
 });
-
-fireHold = ({action, context, device, event, payload})=> {
-    console.log("fireHold");
-    const t_device = cache.getOrAddDevice({action, context, device, event, payload});
-
-    if(t_device.POWER) setPower({action, context, device, event, payload}, 0, updateValue);
-    else setPower({action, context, device, event, payload}, 1, updateValue);
-}
-
-firePress = ({action, context, device, event, payload}) => {
-    console.log("firePress");
-
-    switch(action){
-        case "de.itnox.streamdeck.tasmota.fixed":
-            break;
-
-        case "de.itnox.streamdeck.tasmota.rgbdevice":
-            if(isNaN(viewStates[context])) viewStates[context] = 0;
-
-            viewStates[context]++;
-
-            if(viewStates[context] >= layouts.length) viewStates[context] = 0;
-
-            $SD.setFeedbackLayout(context, layouts[viewStates[context]]);
-
-            let val = 0;
-
-            const t_device = cache.getOrAddDevice({action, context, device, event, payload});
-
-            val = t_device.HSBColor[viewStates[context]];
-
-            $SD.setFeedback(context, {
-                "value": val,
-                "indicator": val
-            });
-
-            break;
-
-        case "de.itnox.streamdeck.tasmota.wwdevice":
-            if(isNaN(viewStates[context])) viewStates[context] = 0;
-
-            viewStates[context]++;
-
-            if(viewStates[context] >= layoutsww.length) viewStates[context] = 0;
-
-            $SD.setFeedbackLayout(context, layoutsww[viewStates[context]]);
-
-            let val2 = 0;
-
-            const t_device2 = cache.getOrAddDevice({action, context, device, event, payload});
-
-            switch (viewStates[context]){
-                case 0:
-                    val2 = t_device2.CT;
-                    break;
-
-                case 1:
-                    val2 = t_device2.White;
-                    break;
-            }
-
-            $SD.setFeedback(context, {
-                "value": val2,
-                "indicator": val2
-            });
-            break;
-
-        default:
-            console.log("action: " + action);
-            break;
-    }
-}
-
 
 
 
@@ -365,9 +311,6 @@ brightnessAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
     cache.removeContext({action, context, device, event, payload});
 });
-
-
-
 
 
 
