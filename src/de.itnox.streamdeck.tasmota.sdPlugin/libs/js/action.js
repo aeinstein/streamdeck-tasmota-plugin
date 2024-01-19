@@ -9,6 +9,9 @@ class ELGSDAction {
 	on = EventEmitter.on;
 	emit = EventEmitter.emit;
 
+    downTimer = -1;
+    _registered = false;
+
 	constructor(UUID) {
 		if (!UUID) {
 			console.error(
@@ -46,6 +49,38 @@ class ELGSDAction {
 		this.on(`${this.UUID}.${Events.keyDown}`, (jsn) => fn(jsn));
 		return this;
 	}
+
+    /**
+     * Registers a callback function for the keyPressed event, which fires when pressing a key down
+     * and release it under 750ms
+     * @param {function} fn
+     */
+    onKeyPressed(fn){
+        if (!fn) {
+            console.error('A callback function for the keyDown event is required for onKeyDown.');
+        }
+
+        this._registerHoldTimer(fn);
+
+        this.on(`${this.UUID}.${Events.keyPressed}`, (jsn) => fn(jsn));
+        return this;
+    }
+
+    /**
+     * Registers a callback function for the keyLongPressed event, which fires when pressing a key down
+     * and hold it for minimum 750ms
+     * @param {function} fn
+     */
+    onKeyLongPressed(fn){
+        if (!fn) {
+            console.error('A callback function for the keyDown event is required for onKeyDown.');
+        }
+
+        this._registerHoldTimer(fn);
+
+        this.on(`${this.UUID}.${Events.keyLongPressed}`, (jsn) => fn(jsn));
+        return this;
+    }
 
 	/**
 	 * Registers a callback function for the keyUp event, which fires when releasing a key
@@ -209,6 +244,29 @@ class ELGSDAction {
 		this.on(`${this.UUID}.${Events.touchTap}`, (jsn) => fn(jsn));
 		return this;
 	}
+
+    _registerHoldTimer(){
+        if(this._registered) return;
+
+        this.on(`${this.UUID}.${Events.keyDown}`, (jsn) => {
+            if(this.downTimer >= 0) clearInterval(this.downTimer);
+
+            this.downTimer = setTimeout(()=>{
+                this.downTimer = -1;
+                jsn.event = "keyLongPressed";
+                this.emit(`${this.UUID}.${Events.keyLongPressed}`, jsn);
+            }, 750);
+        });
+
+        this.on(`${this.UUID}.${Events.keyUp}`, (jsn) => {
+            if(this.downTimer >= 0) {
+                clearInterval(this.downTimer);
+                this.downTimer = -1;
+                jsn.event = "keyPressed";
+                this.emit(`${this.UUID}.${Events.keyPressed}`, jsn);
+            }
+        });
+    }
 }
 
 const Action = ELGSDAction;

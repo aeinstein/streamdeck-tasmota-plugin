@@ -29,6 +29,8 @@ const Events = {
 	didReceiveGlobalSettings: 'didReceiveGlobalSettings',
 	keyDown: 'keyDown',
 	keyUp: 'keyUp',
+    keyPressed: 'keyPressed',
+    keyLongPressed: 'keyLongPressed',
 	willAppear: 'willAppear',
 	willDisappear: 'willDisappear',
 	titleParametersDidChange: 'titleParametersDidChange',
