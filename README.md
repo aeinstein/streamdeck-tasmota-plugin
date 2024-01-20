@@ -57,6 +57,11 @@ Functions:
 * Press: set stored Color
 * Hold: Toggle Power
 
+## Button for custom Command
+Functions:
+* Press: send custom Command
+* Hold: send alternative Command
+
 ## Button for static CWW Value
 Functions:
 * Press: set stored CWW
@@ -74,7 +79,7 @@ Functions:
 * Rotate: Change visible parameter
 * Layouts: Color,Saturation,Brightness
 
-## CW Control
+## CWW Control
 Functions:
 * Press: Switch through parameters
 * Hold: Toggle Power
