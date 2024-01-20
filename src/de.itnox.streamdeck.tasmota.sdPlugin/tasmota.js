@@ -11,6 +11,12 @@ setColor = ({action, context, device, event, payload}, color, callback, noQueue 
     _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=Color%20" + color);
 }
 
+sendCommand = ({action, context, device, event, payload}, command, callback, noQueue = false)=>{
+    console.log("sendCommand: " + command);
+
+    _send({action, context, device, event, payload, callback, noQueue}, "/cm?cmnd=" + command);
+}
+
 setHUE = ({action, context, device, event, payload}, hue, callback, noQueue = false)=>{
     console.log("setHUE: " + hue);
 
@@ -108,8 +114,8 @@ setPower = ({action, context, device, event, payload}, power, callback, noQueue 
     _send({action, context, device, event, payload, callback, noQueue}, querystring);
 }
 
-updateValue = (t_device, success, result, senderAction)=>{
-    console.log(t_device, success, result, senderAction);
+updateValue = (t_device, success, result, senderAction, senderContext)=>{
+    console.log(t_device, success, result, senderAction, senderContext);
 
     if(!success) {
         t_device.forEachContext((context)=>{
@@ -118,75 +124,89 @@ updateValue = (t_device, success, result, senderAction)=>{
         return;
     }
 
-    if(result.POWER === "OFF") {
-        t_device.POWER = 0;
+    if(result.POWER === "OFF") t_device.POWER = 0;
+    if(result.POWER === "ON") t_device.POWER = 1;
+    if(result.StatusSNS) t_device.StatusSNS = result.StatusSNS;     // Nur wenn Result Powerstatus hat
 
-        t_device.forEachContext((context)=>{
-            $SD.setState(context, 0);
-            $SD.setTitle(context, "OFF");
-        });
+    if(result.HSBColor) {
+        //t_device.POWER = result.POWER !== "OFF";
+        t_device.Dimmer = result.Dimmer;
+        t_device.White = result.White;
+        t_device.CT = result.CT;
+
+        // WHY is HSBColor not an array ;!?!?! grrr
+        let ff = result.HSBColor.split(",");
+        t_device.HSBColor[0] = Number(ff[0]);
+        t_device.HSBColor[1] = Number(ff[1]);
+        t_device.HSBColor[2] = Number(ff[2]);
     }
-
-    if(result.POWER === "ON") {
-        t_device.POWER = 1;
-
-        t_device.forEachContext((context)=>{
-            $SD.setState(context, 1);
-            $SD.setTitle(context, "ON");
-        });
-    }
-
-    // Nur wenn Result Powerstatus hat
-    if(result.StatusSNS){
-        if(t_device.POWER) {
-            t_device.forEachContext((context)=>{
-                $SD.setState(context, 1);
-
-                switch(t_device.settings[context].titleMode){
-                case "1":
-                    $SD.setTitle(context, result.StatusSNS.ENERGY.Power + " W");
-                    //else $SD.setTitle(context, "0 W");
-                    break;
-
-                case "2":
-                    $SD.setTitle(context, result.StatusSNS.ENERGY.Today + " Wh");
-                    //else $SD.setTitle(context, "0 Wh");
-                    break;
-
-                case "3":
-                    $SD.setTitle(context, result.StatusSNS.ENERGY.Total + " Wh");
-                    //else $SD.setTitle(context, "0 Wh");
-                    break;
-
-                default:
-                    console.log("std titelmode");
-                    $SD.setTitle(context, "ON");
-                    break;
-                }
-            });
-        }
-    }
-
-    if(!result.HSBColor) return;    // No RGB
-
-    //t_device.POWER = result.POWER !== "OFF";
-    t_device.Dimmer = result.Dimmer;
-    t_device.White = result.White;
-    t_device.CT = result.CT;
-
-    // WHY is HSBColor not an array ;!?!?! grrr
-    let hsb = result.HSBColor;
-    let ff = hsb.split(",");
-    t_device.HSBColor[0] = Number(ff[0]);
-    t_device.HSBColor[1] = Number(ff[1]);
-    t_device.HSBColor[2] = Number(ff[2]);
-
 
     // Alle, zu diesem Result, passenden Steuerelemente updaten
     t_device.forEachContext((context)=>{
         let action = t_device.actions[context];
 
         switch(action){
+            case "de.itnox.streamdeck.tasmota.fixed":
+            case "de.itnox.streamdeck.tasmota.wwfixed":
+                // Kein Update da nur Eingang
+                break;
+
+            case "de.itnox.streamdeck.tasmota.toggle":
+                if(t_device.POWER) {
+                    t_device.forEachContext((context)=>{
+                        $SD.setState(context, 1);
+
+                        if(t_device.StatusSNS) {
+                            switch(t_device.settings[context].titleMode){
+                                case "1":
+                                    $SD.setTitle(context, t_device.StatusSNS.ENERGY.Power + " W");
+                                    //else $SD.setTitle(context, "0 W");
+                                    break;
+
+                                case "2":
+                                    $SD.setTitle(context, t_device.StatusSNS.ENERGY.Today + " Wh");
+                                    //else $SD.setTitle(context, "0 Wh");
+                                    break;
+
+                                case "3":
+                                    $SD.setTitle(context, t_device.StatusSNS.ENERGY.Total + " Wh");
+                                    //else $SD.setTitle(context, "0 Wh");
+                                    break;
+
+                                default:
+                                    console.log("std titelmode");
+                                    $SD.setTitle(context, "ON");
+                                    break;
+                            }
+
+                        } else {
+                            $SD.setTitle(context, "ON");
+                        }
+                    });
+                } else {
+                    $SD.setTitle(context, "OFF");
+                }
+
+                $SD.setState(context, t_device.POWER);
+                break;
+
+            case "de.itnox.streamdeck.tasmota.custom":
+                // Nur eigenes Control aktualisieren
+                if(senderContext !== context) break;
+
+                let title = "";
+
+                console.log(result);
+
+                for (let x of Object.keys(result)) {
+                    title += x + ": " + result[x];
+                }
+
+                console.log("setTitle: " + title);
+                $SD.setTitle(context, title);
+                $SD.showOk(context);
+                break;
+
             case "de.itnox.streamdeck.tasmota.wwdevice":
                 switch(viewStates[context]){
                     case 0:
@@ -208,11 +228,16 @@ updateValue = (t_device, success, result, senderAction)=>{
             case "de.itnox.streamdeck.tasmota.rgbdevice":
             case "de.itnox.streamdeck.tasmota.brightness":
             case "de.itnox.streamdeck.tasmota.color":
+            case "de.itnox.streamdeck.tasmota.saturation":
                 console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]]);
                 $SD.setFeedback(context, {
                     "value": t_device.HSBColor[viewStates[context]],
                     "indicator": t_device.HSBColor[viewStates[context]]
                 });
+                break;
+
+            default:
+                console.warn("Action: " + action + " unknown");
                 break;
         }
     });

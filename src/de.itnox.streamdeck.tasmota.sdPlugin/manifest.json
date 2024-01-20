@@ -6,7 +6,7 @@
 	"Name": "Tasmota",
 	"Icon": "actions/assets/tasmota_logo",
 	"URL": "https://github.com/aeinstein/streamdeck-tasmota-plugin",
-	"Version": "1.0.2",
+	"Version": "1.1.0",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},
@@ -34,6 +34,7 @@
 					"Image": "actions/assets/power_on"
 				}
 			],
+			"Tooltip": "Toggle power",
 			"UUID": "de.itnox.streamdeck.tasmota.toggle",
 			"PropertyInspectorPath": "actions/pi/outlet.html"
 		},
@@ -65,6 +66,19 @@
 		},
 
 		{
+			"Icon": "actions/assets/power",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/assets/power"
+				}
+			],
+			"Tooltip": "Send custom Command",
+			"UUID": "de.itnox.streamdeck.tasmota.custom",
+			"PropertyInspectorPath": "actions/pi/custom.html"
+		},
+
+		{
 			"Name": "Color",
 			"Icon": "actions/assets/color",
 			"Controllers": ["Encoder"],
@@ -80,7 +94,7 @@
 					"Image": "actions/assets/color"
 				}
 			],
-			"Tooltip": "This is an example tooltip",
+			"Tooltip": "Control Color",
 			"UUID": "de.itnox.streamdeck.tasmota.color",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
 		},

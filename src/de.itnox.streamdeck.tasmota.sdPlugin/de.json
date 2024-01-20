@@ -1,18 +1,27 @@
 {
   "Description": "Ein Plugin zur Steuerung von Geräten mit Tasmota Firmware",
   "Name": "Tasmota Bindings",
-  "de.itnox.streamdeck.tasmota.toggle": {
-    "Name": "Steckdose",
-    "Tooltip": "An/Aus schalten von Tasmota Steckdosen"
+
+  "de.itnox.streamdeck.tasmota.custom": {
+    "Name": "Benutzerdef. Befehl",
+    "Tooltip": "Sendet einen benutzerdefinierten Befehl an ein Tasmota Device"
   },
+
+  "de.itnox.streamdeck.tasmota.toggle": {
+    "Name": "An/Aus",
+    "Tooltip": "An/Aus schalten von Tasmota Geräten"
+  },
+
   "de.itnox.streamdeck.tasmota.color": {
     "Name": "Farbe",
     "Tooltip": "Farbregler"
   },
+
   "de.itnox.streamdeck.tasmota.brightness": {
     "Name": "Helligkeit",
     "Tooltip": "Hellgkeitsregler"
   },
+
   "de.itnox.streamdeck.tasmota.saturation": {
     "Name": "Sättigung",
     "Tooltip": "Farbsättigung"
@@ -27,14 +36,17 @@
     "Name": "CWW Preset",
     "Tooltip": "Feste Werte, kann in Multi-Aktionen für Szenen verwendet werden"
   },
+
   "de.itnox.streamdeck.tasmota.rgbdevice": {
     "Name": "HSB Regler",
     "Tooltip": "Regler für Hue,Saturation und Brightness"
   },
+
   "de.itnox.streamdeck.tasmota.wwdevice": {
     "Name": "CWW Regler",
     "Tooltip": "Regler für Kalt/Warm Weiss"
   },
+
   "Localization": {
     "URL of the tasmota device": "URL des Tasmota Gerätes",
     "Color": "Farbe",
