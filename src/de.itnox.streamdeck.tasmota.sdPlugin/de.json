@@ -39,7 +39,7 @@
 
   "de.itnox.streamdeck.tasmota.rgbdevice": {
     "Name": "HSB Regler",
-    "Tooltip": "Regler für Hue,Saturation und Brightness"
+    "Tooltip": "Regler für Hue, Saturation und Brightness"
   },
 
   "de.itnox.streamdeck.tasmota.wwdevice": {

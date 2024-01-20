@@ -53,11 +53,11 @@
 		},
 
 		{
-			"Icon": "actions/assets/temperature",
+			"Icon": "actions/assets/cww",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/temperature"
+					"Image": "actions/assets/cww"
 				}
 			],
 			"Tooltip": "Load static CWW Setting",
@@ -66,11 +66,11 @@
 		},
 
 		{
-			"Icon": "actions/assets/power",
+			"Icon": "actions/assets/command",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/power"
+					"Image": "actions/assets/command"
 				}
 			],
 			"Tooltip": "Send custom Command",
@@ -122,7 +122,7 @@
 
 		{
 			"Name": "Saturation",
-			"Icon": "actions/assets/temperature",
+			"Icon": "actions/assets/saturation",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/saturation.json",
@@ -133,7 +133,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/temperature"
+					"Image": "actions/assets/saturation"
 				}
 			],
 			"Tooltip": "Control Saturation",
@@ -164,7 +164,7 @@
 		},
 		{
 			"Name": "CWW Control",
-			"Icon": "actions/assets/brightness",
+			"Icon": "actions/assets/cww",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/saturation.json",
@@ -176,7 +176,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/color"
+					"Image": "actions/assets/cww"
 				}
 			],
 			"Tooltip": "Control Cold/Warm White",
