@@ -40,7 +40,7 @@
 		},
 
 		{
-			"Icon": "actions/assets/color",
+			"Icon": "actions/assets/rgb",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
@@ -80,7 +80,7 @@
 
 		{
 			"Name": "Color",
-			"Icon": "actions/assets/color",
+			"Icon": "actions/assets/rgb",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/rgb.json",
@@ -91,7 +91,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/color"
+					"Image": "actions/assets/rgb"
 				}
 			],
 			"Tooltip": "Control Color",
@@ -143,7 +143,7 @@
 
 		{
 			"Name": "HSB Control",
-			"Icon": "actions/assets/color",
+			"Icon": "actions/assets/rgb",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/rgb.json",
@@ -155,7 +155,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/color"
+					"Image": "actions/assets/rgb"
 				}
 			],
 			"Tooltip": "Control Hue, Saturation, Brightness",
