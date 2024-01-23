@@ -44,7 +44,7 @@
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/color@2x"
+					"Image": "actions/assets/rgb"
 				}
 			],
 			"Tooltip": "Load static RGB Setting",

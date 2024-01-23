@@ -11,16 +11,17 @@ const wwfixedAction= new Action('de.itnox.streamdeck.tasmota.wwfixed');
 
 const viewStates = [];
 
+// Config for MultiController
 const layouts = {
     "HSB": [
-        "layouts/rgb.json",
-        "layouts/saturation.json",
-        "layouts/brightness.json"
+        ["layouts/rgb.json", "actions/assets/rgb"],
+        ["layouts/saturation.json", "actions/assets/saturation"],
+        ["layouts/brightness.json", "actions/assets/brightness"]
     ],
 
     "CWW": [
-        "layouts/colortemp.json",
-        "layouts/brightness.json"
+        ["layouts/colortemp.json", "actions/assets/cww"],
+        ["layouts/brightness.json", "actions/assets/brightness"]
     ]
 };
 
@@ -59,22 +60,10 @@ wwfixedAction.onKeyLongPressed(({action, context, device, event, payload}) => {
 wwaction.onWillAppear(({action, context, device, event, payload})=>{
     if(viewStates[context] === undefined) viewStates[context] = 0;
 
-    $SD.setFeedbackLayout(context, layouts["CWW"][viewStates[context]]);
-    let icon;
-
-    // und icon setzen
-    switch (viewStates[context]){
-    case 0:
-        icon = "actions/assets/cww";
-        break;
-
-    case 1:
-        icon = "actions/assets/brightness";
-        break;
-    }
+    $SD.setFeedbackLayout(context, layouts["CWW"][viewStates[context]][0]);
 
     $SD.setFeedback(context, {
-        "icon": icon
+        "icon": layouts["CWW"][viewStates[context]][1]
     });
 
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
@@ -102,21 +91,18 @@ wwaction.onDialPressed(({action, context, device, event, payload})=> {
 
     if(viewStates[context] >= layouts["CWW"].length) viewStates[context] = 0;
 
-    $SD.setFeedbackLayout(context, layouts["CWW"][viewStates[context]]);
+    $SD.setFeedbackLayout(context, layouts["CWW"][viewStates[context]][0]);
 
     let val = 0;
-    let icon;
 
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
 
     switch (viewStates[context]){
     case 0:
-        icon = "actions/assets/cww";
         val = t_device.CT;
         break;
 
     case 1:
-        icon = "actions/assets/brightness";
         val = t_device.White;
         break;
     }
@@ -124,7 +110,7 @@ wwaction.onDialPressed(({action, context, device, event, payload})=> {
     $SD.setFeedback(context, {
         "value": val,
         "indicator": val,
-        "icon": icon
+        "icon": layouts["CWW"][viewStates[context]][1]
     });
 });
 
@@ -166,24 +152,10 @@ wwaction.onDialRotate(({ action, context, device, event, payload }) => {
 rgbaction.onWillAppear(({action, context, device, event, payload})=>{
     //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
-    else $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]]);
-
-    let icon;
-
-    switch(viewStates[context]){
-    case 0:
-        icon = "actions/assets/color";
-        break;
-    case 1:
-        icon = "actions/assets/cww";
-        break;
-    case 2:
-        icon = "actions/assets/brightness";
-        break;
-    }
+    else $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]][0]);
 
     $SD.setFeedback(context, {
-        "icon": icon
+        "icon": layouts["HSB"][viewStates[context]][1]
     });
 
     const t_device = cache.getOrAddDevice({ action, context, device, event, payload });
@@ -214,21 +186,8 @@ rgbaction.onDialPressed(({action, context, device, event, payload})=> {
     if(viewStates[context] >= layouts["HSB"].length) viewStates[context] = 0;
 
     // Select Layout
-    $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]]);
+    $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]][0]);
 
-    let icon;
-
-    switch(viewStates[context]){
-    case 0:
-        icon = "actions/assets/color";
-        break;
-    case 1:
-        icon = "actions/assets/cww";
-        break;
-    case 2:
-        icon = "actions/assets/brightness";
-        break;
-    }
 
     let val = 0;
 
@@ -239,7 +198,7 @@ rgbaction.onDialPressed(({action, context, device, event, payload})=> {
     $SD.setFeedback(context, {
         "value": val,
         "indicator": val,
-        "icon": icon
+        "icon": layouts["HSB"][viewStates[context]][1]
     });
 });
 
