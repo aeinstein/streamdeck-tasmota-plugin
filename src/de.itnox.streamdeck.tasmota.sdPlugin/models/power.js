@@ -28,6 +28,6 @@ powerAction.onWillAppear(({action, context, device, event, payload})=>{
 powerAction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
-    t_device.setAutoRefresh(0);
+    t_device.setAutoRefresh(-1);
     cache.removeContext({action, context, device, event, payload});
 });

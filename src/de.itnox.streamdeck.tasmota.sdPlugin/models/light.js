@@ -80,7 +80,7 @@ wwaction.onWillAppear(({action, context, device, event, payload})=>{
 wwaction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
-    t_device.setAutoRefresh(0);
+    t_device.setAutoRefresh(-1);
     cache.removeContext({action, context, device, event, payload});
 });
 
@@ -152,7 +152,8 @@ wwaction.onDialRotate(({ action, context, device, event, payload }) => {
 rgbaction.onWillAppear(({action, context, device, event, payload})=>{
     //switch(viewStates[context])
     if(viewStates[context] === undefined) viewStates[context] = 0;
-    else $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]][0]);
+
+    $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]][0]);
 
     $SD.setFeedback(context, {
         "icon": layouts["HSB"][viewStates[context]][1]
@@ -172,7 +173,7 @@ rgbaction.onWillAppear(({action, context, device, event, payload})=>{
 rgbaction.onWillDisappear(({action, context, device, event, payload}) =>{
     console.log( action, context, device, event, payload);
     const t_device = cache.getOrAddDevice({action, context, device, event, payload});
-    t_device.setAutoRefresh(0);
+    t_device.setAutoRefresh(-1);
     cache.removeContext({action, context, device, event, payload});
 });
 
@@ -187,7 +188,6 @@ rgbaction.onDialPressed(({action, context, device, event, payload})=> {
 
     // Select Layout
     $SD.setFeedbackLayout(context, layouts["HSB"][viewStates[context]][0]);
-
 
     let val = 0;
 
@@ -347,7 +347,7 @@ saturationAction.onDialUp(({ action, context, device, event, payload }) => {
 });
 
 saturationAction.onWillAppear(({action, context, device, event, payload})=>{
-    viewStates[context] = 2;
+    viewStates[context] = 1;
     getHSBColor({action, context, device, event, payload}, updateValue);
 })
 

@@ -136,14 +136,16 @@ class Device {
     setAutoRefresh(secs, callback){
         console.log("setAutoRefresh: " + secs);
 
-        if(secs > 0) {
-            this.RefreshPid = setInterval(callback, secs * 1000);
 
-        } else {
+        if(secs < 0) {
             if(this.RefreshPid >= 0) {
                 clearInterval(this.RefreshPid);
                 this.RefreshPid = -1;
             }
+        }
+
+        if(secs > 0) {
+            this.RefreshPid = setInterval(callback, secs * 1000);
         }
     }
 }
