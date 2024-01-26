@@ -1,3 +1,11 @@
+hsl2rgb = (h,s,l, a=s*Math.min(l,1-l), f= (n,k=(n+h/30)%12) => l - a*Math.max(Math.min(k-3,9-k,1),-1)) => [f(0),f(8),f(4)];
+
+rgb2hex = (r,g,b) => "#" + [r,g,b].map(x=>Math.round(x*255).toString(16).padStart(2,0) ).join('');
+
+const LAYOUT_HUE = 0;
+const LAYOUT_SATURATION = 1;
+const LAYOUT_BRIGHTNESS = 2;
+
 removeItemOnce = (arr, value) => {
     const index = arr.indexOf(value);
     if (index > -1) {

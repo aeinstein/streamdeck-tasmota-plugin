@@ -229,11 +229,33 @@ updateValue = (t_device, success, result, senderAction, senderContext)=>{
             case "de.itnox.streamdeck.tasmota.brightness":
             case "de.itnox.streamdeck.tasmota.color":
             case "de.itnox.streamdeck.tasmota.saturation":
-                console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]]);
-                $SD.setFeedback(context, {
+                console.log("set: " + context + " = " + t_device.HSBColor[viewStates[context]] + " viewState: "+ viewStates[context]);
+
+                let layout_prefs = {
                     "value": t_device.HSBColor[viewStates[context]],
                     "indicator": t_device.HSBColor[viewStates[context]]
-                });
+                };
+
+                let hue = t_device.HSBColor[LAYOUT_HUE];
+                let color_string = rgb2hex(...hsl2rgb(hue, 1, 0.5));
+
+                console.log("convert from: " + hue + " to: " + color_string);
+
+                if(viewStates[context] === LAYOUT_SATURATION
+                    && (action === "de.itnox.streamdeck.tasmota.rgbdevice"
+                        || action === "de.itnox.streamdeck.tasmota.saturation")
+                ){
+                    layout_prefs["value"] = t_device.HSBColor[viewStates[context]];
+
+                    layout_prefs["indicator"] = {
+                        "bar_bg_c": "0:#ffffff,1:" + color_string,
+                        "value": t_device.HSBColor[viewStates[context]]
+                    }
+                }
+
+                console.log(action + "=", layout_prefs);
+
+                $SD.setFeedback(context, layout_prefs);
                 break;
 
             default:

@@ -158,6 +158,7 @@
 					"Image": "actions/assets/rgb"
 				}
 			],
+			"SupportedInMultiActions": false,
 			"Tooltip": "Control Hue, Saturation, Brightness",
 			"UUID": "de.itnox.streamdeck.tasmota.rgbdevice",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"
@@ -179,6 +180,7 @@
 					"Image": "actions/assets/cww"
 				}
 			],
+			"SupportedInMultiActions": false,
 			"Tooltip": "Control Cold/Warm White",
 			"UUID": "de.itnox.streamdeck.tasmota.wwdevice",
 			"PropertyInspectorPath": "actions/pi/ledstripe.html"

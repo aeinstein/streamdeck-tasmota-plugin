@@ -195,11 +195,23 @@ rgbaction.onDialPressed(({action, context, device, event, payload})=> {
 
     val = t_device.HSBColor[viewStates[context]];
 
-    $SD.setFeedback(context, {
+    let layout_prefs = {
         "value": val,
         "indicator": val,
         "icon": layouts["HSB"][viewStates[context]][1]
-    });
+    };
+
+    if(viewStates[context] === LAYOUT_SATURATION) {
+        let hue = t_device.HSBColor[LAYOUT_HUE];
+        let color_string = rgb2hex(...hsl2rgb(hue, 1, 0.5));
+
+        layout_prefs["indicator"] = {
+            "bar_bg_c": "0:#ffffff,1:" + color_string,
+            "value": t_device.HSBColor[viewStates[context]]
+        }
+    }
+
+    $SD.setFeedback(context, layout_prefs);
 });
 
 rgbaction.onDialLongPressed(({action, context, device, event, payload})=>{
