@@ -6,7 +6,7 @@
 	"Name": "Tasmota",
 	"Icon": "actions/assets/tasmota_logo",
 	"URL": "https://github.com/aeinstein/streamdeck-tasmota-plugin",
-	"Version": "1.1.1",
+	"Version": "1.1.2",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},
