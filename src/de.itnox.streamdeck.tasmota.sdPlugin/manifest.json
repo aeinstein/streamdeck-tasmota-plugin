@@ -4,7 +4,7 @@
 	"CodePath": "app.html",
 	"Description": "Control your Tasmota devices with your Stream Deck.",
 	"Name": "Tasmota",
-	"Icon": "actions/assets/tasmota_logo",
+	"Icon": "assets/plugin_icon",
 	"URL": "https://github.com/aeinstein/streamdeck-tasmota-plugin",
 	"Version": "1.1.2",
 	"Software": {
@@ -21,17 +21,17 @@
 		}
 	],
 	"Category": "Tasmota",
-	"CategoryIcon": "actions/assets/tasmota_logo",
+	"CategoryIcon": "assets/tasmota_logo",
 	"Actions": [
 		{
-			"Icon": "actions/assets/power",
+			"Icon": "assets/power",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/power"
+					"Image": "assets/power"
 				},
 				{
-					"Image": "actions/assets/power_on"
+					"Image": "assets/power_on"
 				}
 			],
 			"Tooltip": "Toggle power",
@@ -40,11 +40,11 @@
 		},
 
 		{
-			"Icon": "actions/assets/rgb",
+			"Icon": "assets/rgb",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/rgb"
+					"Image": "assets/rgb"
 				}
 			],
 			"Tooltip": "Load static RGB Setting",
@@ -53,11 +53,11 @@
 		},
 
 		{
-			"Icon": "actions/assets/cww",
+			"Icon": "assets/cww",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/cww"
+					"Image": "assets/cww"
 				}
 			],
 			"Tooltip": "Load static CWW Setting",
@@ -66,11 +66,11 @@
 		},
 
 		{
-			"Icon": "actions/assets/command",
+			"Icon": "assets/command",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/assets/command"
+					"Image": "assets/command"
 				}
 			],
 			"Tooltip": "Send custom Command",
@@ -80,7 +80,7 @@
 
 		{
 			"Name": "Color",
-			"Icon": "actions/assets/rgb",
+			"Icon": "assets/rgb",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/rgb.json",
@@ -91,7 +91,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/rgb"
+					"Image": "assets/rgb"
 				}
 			],
 			"Tooltip": "Control Color",
@@ -101,7 +101,7 @@
 
 		{
 			"Name": "Brightness",
-			"Icon": "actions/assets/brightness",
+			"Icon": "assets/brightness",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/brightness.json",
@@ -112,7 +112,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/brightness"
+					"Image": "assets/brightness"
 				}
 			],
 			"Tooltip": "Control Brightness",
@@ -122,7 +122,7 @@
 
 		{
 			"Name": "Saturation",
-			"Icon": "actions/assets/saturation",
+			"Icon": "assets/saturation",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/saturation.json",
@@ -133,7 +133,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/saturation"
+					"Image": "assets/saturation"
 				}
 			],
 			"Tooltip": "Control Saturation",
@@ -143,7 +143,7 @@
 
 		{
 			"Name": "HSB Control",
-			"Icon": "actions/assets/rgb",
+			"Icon": "assets/rgb",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/rgb.json",
@@ -155,7 +155,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/rgb"
+					"Image": "assets/rgb"
 				}
 			],
 			"SupportedInMultiActions": false,
@@ -165,7 +165,7 @@
 		},
 		{
 			"Name": "CWW Control",
-			"Icon": "actions/assets/cww",
+			"Icon": "assets/cww",
 			"Controllers": ["Encoder"],
 			"Encoder": {
 				"layout": "layouts/saturation.json",
@@ -177,7 +177,7 @@
 			},
 			"States": [
 				{
-					"Image": "actions/assets/cww"
+					"Image": "assets/cww"
 				}
 			],
 			"SupportedInMultiActions": false,

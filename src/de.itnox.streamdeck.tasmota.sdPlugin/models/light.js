@@ -14,14 +14,14 @@ const viewStates = [];
 // Config for MultiController
 const layouts = {
     "HSB": [
-        ["layouts/rgb.json", "actions/assets/rgb"],
-        ["layouts/saturation.json", "actions/assets/saturation"],
-        ["layouts/brightness.json", "actions/assets/brightness"]
+        ["layouts/rgb.json", "assets/rgb"],
+        ["layouts/saturation.json", "assets/saturation"],
+        ["layouts/brightness.json", "assets/brightness"]
     ],
 
     "CWW": [
-        ["layouts/colortemp.json", "actions/assets/cww"],
-        ["layouts/brightness.json", "actions/assets/brightness"]
+        ["layouts/colortemp.json", "assets/cww"],
+        ["layouts/brightness.json", "assets/brightness"]
     ]
 };
 

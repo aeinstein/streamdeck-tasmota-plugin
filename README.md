@@ -13,13 +13,13 @@ optimized for SD+
 
 ## Features
 
-- complete control of RGBWW Leds
-- granular control of RGBWW Leds
+- complete control of RGBWW LEDs
+- granular control of RGBWW LEDs
 - store static values
 - realtime reading on control appearance
-- Same parameters over different controls are synchronized 
-- Auto polling of states
-- Keep viewstate of MultiController when switching pages
+- same parameters over different controls are synchronized 
+- auto polling of states
+- keep viewstate of MultiController when switching pages
 
 
 ## Tested with
@@ -36,7 +36,7 @@ optimized for SD+
 ![](src/de.itnox.streamdeck.tasmota.sdPlugin/previews/setup.PNG)
 
 # Usage
-You can use multiple controls for one device. Recieved parameters updates are dispatched to all controls of the same device.
+You can use multiple controls for one device. Received parameters updates are dispatched to all controls of the same device.
 * Use AutoRefresh if you control your devices from another point, for example: Tasmota-WebGUI or Homeautomation Software
 * After changes, switch page, for reloading AutoRefresh timers
 * You only need one AutoRefresh per Device
